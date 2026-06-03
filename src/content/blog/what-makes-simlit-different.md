@@ -2,7 +2,7 @@
 title: "What makes SimLit different from other fanfiction"
 date: "2026-05-18"
 category: "simlit"
-coverImage: "/images/blog/simlit-cover.jpg"
+coverImage: "/images/studious-lady.png"
 excerpt: "SimLit sits in a strange and interesting position in the fan creativity landscape. It is not quite fanfiction as most people understand it, and not quite a game diary either."
 ---
 

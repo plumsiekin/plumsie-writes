@@ -33,7 +33,7 @@ export const stories: Story[] = [
     id: 'tales-of-berrinmoore',
     title: 'Tales of Berrinmoore',
     subtitle: 'Where old grief learns new names',
-    coverImage: '/images/berrinmoore-cover.jpg',
+    coverImage: '/images/cluttered-window.png',
     status: 'ongoing',
     genre: ['Romance', 'Melancholy', 'Literary'],
     description:
