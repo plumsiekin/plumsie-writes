@@ -283,10 +283,10 @@ html.dark .blog-prose h3 { color: var(--color-sand-50); }
 .cover-gradient-side { background: linear-gradient(to right, rgba(0,0,0,0.45) 0%, transparent 55%); }
 .cover-vignette { background: radial-gradient(ellipse 65% 55% at 50% 50%, transparent 50%, rgba(55,35,18,0.30) 80%, rgba(40,24,10,0.60) 100%); }
 .cover-blur {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, transparent 50%, rgba(0,0,0,0.6) 82%, rgba(0,0,0,1) 100%);
-          mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, transparent 50%, rgba(0,0,0,0.6) 82%, rgba(0,0,0,1) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  -webkit-mask-image: radial-gradient(ellipse 65% 55% at 50% 50%, transparent 50%, rgba(0,0,0,0.6) 80%, rgba(0,0,0,1) 100%);
+          mask-image: radial-gradient(ellipse 65% 55% at 50% 50%, transparent 50%, rgba(0,0,0,0.6) 80%, rgba(0,0,0,1) 100%);
 }
 
 .scroll-cue { animation: scrollPulse 2.5s ease-in-out infinite; }
