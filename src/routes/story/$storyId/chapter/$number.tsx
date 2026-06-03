@@ -4,7 +4,7 @@ import { ContentWarning } from "@/components/ContentWarning";
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { ScrollProgressBar } from "@/components/ScrollProgressBar";
 import { RelatedContent, type RelatedItem } from "@/components/RelatedContent";
-import { stories } from "@/data/stories";
+import { stories, type Chapter } from "@/data/stories";
 import { getAllPosts } from "@/lib/blog";
 
 export const Route = createFileRoute("/story/$storyId/chapter/$number")({
@@ -44,8 +44,8 @@ export const Route = createFileRoute("/story/$storyId/chapter/$number")({
 
 function ChapterPage() {
   const { story, chapter } = Route.useLoaderData();
-  const prevChapter = story.chapters.find((c) => c.number === chapter.number - 1);
-  const nextChapter = story.chapters.find((c) => c.number === chapter.number + 1);
+  const prevChapter = story.chapters.find((c: Chapter) => c.number === chapter.number - 1);
+  const nextChapter = story.chapters.find((c: Chapter) => c.number === chapter.number + 1);
   const paragraphs = chapter.content.split("\n\n").filter(Boolean);
 
   const blogPosts = getAllPosts();
@@ -135,7 +135,7 @@ function ChapterPage() {
         )}
 
         <article className="prose-reader">
-          {paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+          {paragraphs.map((p: string, i: number) => <p key={i}>{p}</p>)}
         </article>
 
         <Ornament />

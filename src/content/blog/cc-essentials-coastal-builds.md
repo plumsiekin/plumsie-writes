@@ -2,7 +2,7 @@
 title: "My current CC essentials for coastal builds"
 date: "2026-05-28"
 category: "cc-mods"
-coverImage: "/images/blog/cc-coastal-cover.jpg"
+coverImage: "/images/studious-lady.png"
 excerpt: "Building coastal in the Sims 4 requires a very specific set of CC if you want things to look genuinely weathered and lived-in rather than catalogue-fresh."
 ---
 

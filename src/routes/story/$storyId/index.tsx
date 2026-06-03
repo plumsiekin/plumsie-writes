@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Ornament } from "@/components/Ornament";
 import { ChapterList } from "@/components/ChapterList";
 import { ContentWarning } from "@/components/ContentWarning";
-import { stories } from "@/data/stories";
+import { stories, type Character, type Story } from "@/data/stories";
 
 export const Route = createFileRoute("/story/$storyId/")({
   loader: ({ params }) => {
@@ -57,10 +57,10 @@ function StoryPage() {
         <div className="relative z-10 max-w-6xl mx-auto px-6 pb-12 w-full">
           <div className="max-w-xl">
             <div className="flex flex-wrap items-center gap-2 mb-4">
-              <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${statusClasses[story.status]}`}>
-                {statusLabels[story.status]}
+              <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${statusClasses[story.status as Story["status"]]}`}>
+                {statusLabels[story.status as Story["status"]]}
               </span>
-              {story.genre.map((g) => (
+              {story.genre.map((g: string) => (
                 <span key={g} className="text-xs text-sand-300 border border-sand-600 px-2 py-0.5 rounded-full">{g}</span>
               ))}
             </div>
@@ -102,7 +102,7 @@ function StoryPage() {
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {story.characters.slice(0, 4).map((char) => (
+            {story.characters.slice(0, 4).map((char: Character) => (
               <div key={char.name} className="flex items-start gap-3 p-4 bg-sand-100 dark:bg-sand-900 rounded-lg">
                 <div className="w-10 h-10 rounded-full bg-sand-300 dark:bg-sand-700 shrink-0 overflow-hidden">
                   {char.portrait ? (

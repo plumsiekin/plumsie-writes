@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Ornament } from "@/components/Ornament";
-import { stories } from "@/data/stories";
+import { stories, type Character } from "@/data/stories";
 
 export const Route = createFileRoute("/story/$storyId/characters")({
   loader: ({ params }) => {
@@ -52,7 +52,7 @@ function CharactersPage() {
       <Ornament />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-        {story.characters.map((char) => (
+        {story.characters.map((char: Character) => (
           <article key={char.name} className="bg-white dark:bg-sand-900 border border-sand-100 dark:border-sand-800 rounded-lg overflow-hidden shadow-sm">
             <div className="aspect-[3/2] bg-sand-200 dark:bg-sand-800 overflow-hidden">
               {char.portrait ? (

@@ -38,8 +38,8 @@ export const Route = createFileRoute("/blog/category/$category")({
 
 function CategoryPage() {
   const { category } = Route.useLoaderData();
-  const label = categoryLabels[category];
-  const description = categoryDescriptions[category];
+  const label = categoryLabels[category as keyof typeof categoryLabels];
+  const description = categoryDescriptions[category as keyof typeof categoryDescriptions];
   const posts = getAllPosts().filter((p) => p.category === category);
 
   return (
