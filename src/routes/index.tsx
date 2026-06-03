@@ -41,7 +41,8 @@ function Home() {
           />
         </div>
         <div className="cover-gradient absolute inset-0 pointer-events-none" />
-        <div className="absolute inset-0 pointer-events-none cover-gradient-side" />
+          <div className="absolute inset-0 pointer-events-none cover-gradient-side" />
+        <div className="cover-vignette absolute inset-0 pointer-events-none" />
 
         <div className="relative z-10 max-w-6xl mx-auto px-6 pb-14 md:pb-20 w-full">
           <div className="max-w-xl">
