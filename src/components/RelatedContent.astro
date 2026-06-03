@@ -1,0 +1,48 @@
+---
+interface RelatedItem {
+  href: string;
+  title: string;
+  tag: string;
+  excerpt: string;
+  readingTime?: number;
+}
+
+interface Props {
+  items: RelatedItem[];
+  heading?: string;
+}
+
+const { items, heading = 'More to read' } = Astro.props;
+if (!items || items.length === 0) return;
+---
+
+<aside class="mt-12 pt-10 border-t border-sand-200 dark:border-sand-800">
+  <h2
+    class="font-cormorant font-semibold text-xl text-sand-900 dark:text-sand-50 mb-5"
+    style="font-family: var(--font-cormorant);"
+  >
+    {heading}
+  </h2>
+  <div class={`grid gap-4 ${items.length >= 2 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 max-w-sm'}`}>
+    {items.map((item) => (
+      <a
+        href={item.href}
+        class="group block p-4 bg-sand-100 dark:bg-sand-900 border border-sand-200 dark:border-sand-800 rounded-lg hover:border-sand-300 dark:hover:border-sand-700 transition-colors"
+      >
+        <span class="text-xs text-sand-600 dark:text-sand-400 border border-sand-200 dark:border-sand-700 px-2 py-0.5 rounded-full">
+          {item.tag}
+        </span>
+        <p
+          class="font-cormorant font-semibold text-lg text-sand-900 dark:text-sand-100 mt-2 mb-1 leading-snug group-hover:text-sand-700 dark:group-hover:text-sand-200 transition-colors"
+          style="font-family: var(--font-cormorant);"
+        >
+          {item.title}
+        </p>
+        <p class="text-sm text-sand-600 dark:text-sand-400 line-clamp-2 leading-relaxed">{item.excerpt}</p>
+        {item.readingTime && (
+          <p class="text-xs text-sand-400 dark:text-sand-600 mt-2">~{item.readingTime} min read</p>
+        )}
+      </a>
+    ))}
+  </div>
+</aside>

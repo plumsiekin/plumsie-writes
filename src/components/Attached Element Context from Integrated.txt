@@ -1,0 +1,62 @@
+Attached Element Context from Integrated Browser
+
+Element: a.flex.items-baseline.gap-1.5.group
+
+URL: http://localhost:4321/
+
+HTML Path: header#navbar.fixed.top-0.left-0.right-0.z-50.transition-all.duration-300 > div.max-w-6xl.mx-auto.px-6.py-4.flex.items-center.justify-between > a.flex.items-baseline.gap-1.5.group
+
+Outer HTML:
+```html
+<a href="/" class="flex items-baseline gap-1.5 group"> <span class="font-cormorant font-semibold text-2xl text-sand-900 dark:text-sand-50 tracking-tight group-hover:text-sand-700 dark:group-hover:text-sand-200 transition-colors" style="font-family: var(--font-cormorant);">plumsiepie</span> <span class="text-sm text-sand-400 dark:text-sand-500 italic" style="font-family: var(--font-cormorant);">writes</span> </a>
+```
+
+Dimensions:
+- top: 16px
+- left: 24px
+- width: 132px
+- height: 32px
+
+CSS:
+```css
+*, ::after, ::before, ::backdrop, ::file-selector-button { box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid; }
+a { color: inherit;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit; }
+#navbar a, #navbar button, #navbar .group span { color: var(--color-sand-900); }
+.flex { display: flex; }
+.items-baseline { align-items: baseline; }
+.gap-1\.5 { gap: calc(var(--spacing) * 1.5); }
+
+/* Inherited */
+.text-sand-900 { color: var(--color-sand-900) }
+html, :host { line-height: 1.5; tab-size: 4; font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"); font-feature-settings: var(--default-font-feature-settings, normal) }
+html { font-family: var(--font-karla); color: var(--color-sand-900) }
+
+/* Resolved values */
+margin: 0px;
+padding: 0px;
+border: 0px solid rgb(74, 44, 16);
+text-decoration: rgb(74, 44, 16);
+align-items: baseline;
+box-sizing: border-box;
+color: rgb(74, 44, 16);
+cursor: pointer /*UA*/;
+display: flex;
+font-family: Karla, sans-serif;
+font-feature-settings: normal;
+height: 31.9953px;
+line-height: 24px;
+tab-size: 4;
+width: 132.241px;
+
+/* CSS variables */
+--spacing: 0.25rem;
+--font-karla: 'Karla', sans-serif;
+--color-sand-900: #4a2c10;
+--default-font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+      "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+```

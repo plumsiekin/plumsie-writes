@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <rect width="800" height="500" fill="#4a2c10"/>
+  <rect width="800" height="500" fill="url(#g)"/>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#663c14" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#2e1a08" stop-opacity="1"/>
+    </linearGradient>
+  </defs>
+  <text x="400" y="240" text-anchor="middle" font-family="serif" font-size="48" fill="#c8842a" opacity="0.4">✦</text>
+  <text x="400" y="290" text-anchor="middle" font-family="serif" font-size="14" fill="#dca050" opacity="0.5">Cover image</text>
+</svg>

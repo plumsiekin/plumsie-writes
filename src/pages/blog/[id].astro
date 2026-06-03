@@ -1,0 +1,217 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Ornament from '../../components/Ornament.astro';
+import AuthorByline from '../../components/AuthorByline.astro';
+import ScrollProgressBar from '../../components/ScrollProgressBar.astro';
+import RelatedContent from '../../components/RelatedContent.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({ params: { id: post.id } }));
+}
+
+const { id } = Astro.params;
+const posts = await getCollection('blog');
+const post = posts.find((p) => p.id === id);
+if (!post) return Astro.redirect('/blog');
+
+const { Content } = await render(post);
+
+const sortedPosts = [...posts].sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+const idx = sortedPosts.findIndex((p) => p.id === id);
+const prevPost = sortedPosts[idx + 1];
+const nextPost = sortedPosts[idx - 1];
+
+// Related: same category first, then any
+const relatedPosts = sortedPosts
+  .filter((p) => p.id !== id && p.data.category === post.data.category)
+  .slice(0, 2);
+const relatedItems = relatedPosts.map((p) => ({
+  href: `/blog/${p.id}`,
+  title: p.data.title,
+  tag: categoryLabels[p.data.category] ?? p.data.category,
+  excerpt: p.data.excerpt,
+}));
+
+const categoryLabels: Record<string, string> = {
+  'sims-4': 'Sims 4',
+  simlit: 'SimLit',
+  'cc-mods': 'CC & Mods',
+  gaming: 'Gaming',
+  'behind-the-story': 'Behind the Story',
+};
+
+const words = post.body?.trim().split(/\s+/).length ?? 100;
+const readingTime = Math.max(1, Math.round(words / 200));
+
+const formattedDate = new Date(post.data.date).toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+const pageTitle = `${post.data.title} | plumsiepie`;
+const pageDescription = post.data.excerpt.length > 160
+  ? post.data.excerpt.slice(0, 157) + '…'
+  : post.data.excerpt;
+
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.excerpt,
+  image: post.data.coverImage,
+  datePublished: new Date(post.data.date).toISOString(),
+  author: {
+    '@type': 'Person',
+    name: 'plumsiepie',
+    url: 'https://plumsiesplace.com/about',
+  },
+  publisher: {
+    '@type': 'Person',
+    name: 'plumsiepie',
+  },
+  url: `https://plumsiesplace.com/blog/${post.id}`,
+});
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  ogImage={post.data.coverImage}
+  ogType="article"
+>
+  <script type="application/ld+json" set:html={jsonLd} slot="head" />
+  <ScrollProgressBar slot="head" />
+
+  <div class="max-w-3xl mx-auto px-6 py-16">
+    <!-- Cover -->
+    {post.data.coverImage && (
+      <div class="aspect-video rounded-lg overflow-hidden bg-sand-200 dark:bg-sand-800 mb-10">
+        <img
+          src={post.data.coverImage}
+          alt=""
+          class="w-full h-full object-cover"
+          loading="lazy"
+          onerror="this.style.display='none'"
+        />
+      </div>
+    )}
+
+    <!-- Meta -->
+    <div class="flex flex-wrap items-center gap-3 mb-4 text-xs text-sand-600 dark:text-sand-400">
+      <a
+        href={`/blog/category/${post.data.category}`}
+        class="border border-sand-200 dark:border-sand-700 px-2 py-0.5 rounded-full hover:border-sand-400 dark:hover:border-sand-500 transition-colors"
+      >
+        {categoryLabels[post.data.category] ?? post.data.category}
+      </a>
+      <time datetime={post.data.date}>{formattedDate}</time>
+      <span>~{readingTime} min read</span>
+    </div>
+
+    <h1
+      class="font-cormorant font-semibold text-4xl md:text-5xl text-sand-900 dark:text-sand-50 mb-5 leading-tight"
+      style="font-family: var(--font-cormorant);"
+    >
+      {post.data.title}
+    </h1>
+
+    <!-- Author byline top -->
+    <div class="border-b border-sand-200 dark:border-sand-800 pb-5 mb-8">
+      <AuthorByline />
+    </div>
+
+    <!-- Prose with inline newsletter injection -->
+    <div
+      id="post-content"
+      class="text-sand-700 dark:text-sand-300 leading-[1.9] text-lg max-w-[65ch] space-y-5"
+    >
+      <Content />
+    </div>
+
+    <!-- Inline newsletter template (JS injects after 3rd paragraph) -->
+    <template id="newsletter-inline-tpl">
+      <div class="my-8 bg-sand-100 dark:bg-sand-900 border border-sand-200 dark:border-sand-800 rounded-lg px-5 py-4 flex flex-col sm:flex-row items-center gap-4">
+        <p class="text-sand-600 dark:text-sand-400 text-sm shrink-0">New posts by email — no schedule, no spam.</p>
+        <form class="flex gap-2 w-full sm:w-auto" onsubmit="return false;">
+          <input
+            type="email"
+            placeholder="your@email.com"
+            class="flex-1 min-w-0 bg-white dark:bg-sand-800 border border-sand-200 dark:border-sand-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-sand-400"
+          />
+          <button type="submit" class="bg-sand-800 dark:bg-sand-700 text-sand-50 text-sm px-4 py-1.5 rounded hover:bg-sand-700 dark:hover:bg-sand-600 transition-colors whitespace-nowrap">
+            Subscribe
+          </button>
+        </form>
+      </div>
+    </template>
+
+    <script>
+      const content = document.getElementById('post-content');
+      const tpl = document.getElementById('newsletter-inline-tpl') as HTMLTemplateElement;
+      if (content && tpl) {
+        const paras = Array.from(content.querySelectorAll('p'));
+        if (paras.length > 3) {
+          const clone = tpl.content.cloneNode(true) as DocumentFragment;
+          paras[2].insertAdjacentElement('afterend', clone.firstElementChild as Element);
+        }
+      }
+    </script>
+
+    <Ornament />
+
+    <!-- Author byline bottom -->
+    <div class="border border-sand-200 dark:border-sand-800 rounded-lg p-4 mb-8">
+      <p class="text-xs text-sand-400 dark:text-sand-600 uppercase tracking-widest mb-3">About the author</p>
+      <AuthorByline />
+    </div>
+
+    <!-- Prev/Next -->
+    <div class="flex items-start justify-between gap-8 text-sm border-t border-sand-200 dark:border-sand-800 pt-8 mb-8">
+      {prevPost && (
+        <a href={`/blog/${prevPost.id}`} class="flex-1 group">
+          <p class="text-xs text-sand-400 mb-1 uppercase tracking-wider">Previous</p>
+          <p class="text-sand-700 dark:text-sand-300 group-hover:text-sand-900 dark:group-hover:text-sand-100 transition-colors leading-snug">
+            ← {prevPost.data.title}
+          </p>
+        </a>
+      )}
+      {nextPost && (
+        <a href={`/blog/${nextPost.id}`} class="flex-1 text-right group">
+          <p class="text-xs text-sand-400 mb-1 uppercase tracking-wider">Next</p>
+          <p class="text-sand-700 dark:text-sand-300 group-hover:text-sand-900 dark:group-hover:text-sand-100 transition-colors leading-snug">
+            {nextPost.data.title} →
+          </p>
+        </a>
+      )}
+    </div>
+
+    <!-- Related posts -->
+    {relatedItems.length > 0 && <RelatedContent items={relatedItems} heading="More from the blog" />}
+
+    <!-- Newsletter CTA bottom -->
+    <div class="mt-10 bg-sand-100 dark:bg-sand-900 border border-sand-200 dark:border-sand-800 rounded-lg p-6 text-center">
+      <h2
+        class="font-cormorant font-semibold text-2xl text-sand-900 dark:text-sand-50 mb-2"
+        style="font-family: var(--font-cormorant);"
+      >
+        Follow the story
+      </h2>
+      <p class="text-sand-600 dark:text-sand-400 text-sm mb-4">No schedule. Just a quiet note when something new is ready.</p>
+      <form class="flex flex-col sm:flex-row gap-3 max-w-sm mx-auto" onsubmit="return false;">
+        <input
+          type="email"
+          placeholder="your@email.com"
+          class="flex-1 bg-white dark:bg-sand-800 border border-sand-200 dark:border-sand-700 rounded px-4 py-2 text-sm focus:outline-none focus:border-sand-400"
+        />
+        <button type="submit" class="bg-sand-800 hover:bg-sand-700 dark:bg-sand-700 dark:hover:bg-sand-600 text-sand-50 text-sm px-5 py-2 rounded transition-colors">
+          Subscribe
+        </button>
+      </form>
+    </div>
+  </div>
+</Layout>

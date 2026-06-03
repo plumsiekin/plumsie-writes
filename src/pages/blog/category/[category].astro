@@ -1,0 +1,100 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Ornament from '../../../components/Ornament.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const categories = ['sims-4', 'simlit', 'cc-mods', 'gaming', 'behind-the-story'];
+  return categories.map((category) => ({ params: { category } }));
+}
+
+const { category } = Astro.params;
+
+const categoryMeta: Record<string, { label: string; description: string }> = {
+  'sims-4': {
+    label: 'Sims 4',
+    description: 'Posts about The Sims 4 — gameplay, updates, stories, and the peculiar magic of a life simulator that keeps surprising me.',
+  },
+  simlit: {
+    label: 'SimLit',
+    description: 'Writing about SimLit as a form — what it is, how it works, and why stories told through a life simulator can carry genuine emotional weight.',
+  },
+  'cc-mods': {
+    label: 'CC & Mods',
+    description: 'Custom content and mods that shape the visual world of my stories. The tools behind the pictures, credited where I can trace them.',
+  },
+  gaming: {
+    label: 'Gaming',
+    description: 'Occasional thoughts on games beyond The Sims — the ones that made me feel something, or think differently about storytelling.',
+  },
+  'behind-the-story': {
+    label: 'Behind the Story',
+    description: 'Process notes, decisions, and the small quiet things that happen between chapters. What I was thinking. What changed.',
+  },
+};
+
+const meta = categoryMeta[category] ?? { label: category, description: '' };
+
+const allPosts = await getCollection('blog');
+const posts = allPosts
+  .filter((p) => p.data.category === category)
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
+const pageTitle = `${meta.label} — Blog | plumsiepie`;
+const pageDescription = meta.description.slice(0, 160);
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div class="max-w-4xl mx-auto px-6 py-16">
+    <!-- Header -->
+    <div class="mb-10">
+      <a href="/blog" class="text-xs text-sand-400 dark:text-sand-600 hover:text-sand-700 dark:hover:text-sand-300 transition-colors uppercase tracking-widest">
+        ← All posts
+      </a>
+      <h1
+        class="font-cormorant font-semibold text-4xl md:text-5xl text-sand-900 dark:text-sand-50 mt-3 mb-3"
+        style="font-family: var(--font-cormorant);"
+      >
+        {meta.label}
+      </h1>
+      {meta.description && (
+        <p class="text-sand-600 dark:text-sand-400 leading-relaxed max-w-2xl">{meta.description}</p>
+      )}
+      <p class="text-xs text-sand-400 dark:text-sand-600 mt-3">{posts.length} {posts.length === 1 ? 'post' : 'posts'}</p>
+    </div>
+
+    <Ornament />
+
+    {posts.length > 0 ? (
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {posts.map((post) => (
+          <article class="group bg-white dark:bg-sand-900 border border-sand-100 dark:border-sand-800 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+            <a href={`/blog/${post.id}`} class="block overflow-hidden aspect-video bg-sand-200 dark:bg-sand-800">
+              <img
+                src={post.data.coverImage}
+                alt=""
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+                onerror="this.src='/images/placeholder-blog.jpg'"
+              />
+            </a>
+            <div class="p-5">
+              <time class="text-xs text-sand-400 dark:text-sand-600" datetime={post.data.date}>
+                {new Date(post.data.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+              </time>
+              <h2
+                class="font-cormorant font-semibold text-xl text-sand-900 dark:text-sand-50 mt-1 mb-2 leading-snug group-hover:text-sand-700 dark:group-hover:text-sand-200 transition-colors"
+                style="font-family: var(--font-cormorant);"
+              >
+                <a href={`/blog/${post.id}`}>{post.data.title}</a>
+              </h2>
+              <p class="text-sm text-sand-600 dark:text-sand-400 line-clamp-3">{post.data.excerpt}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <p class="text-sand-400 dark:text-sand-600 text-sm">No posts in this category yet.</p>
+    )}
+  </div>
+</Layout>
