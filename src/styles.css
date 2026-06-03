@@ -281,7 +281,7 @@ html.dark .blog-prose h3 { color: var(--color-sand-50); }
 }
 .cover-gradient { background: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 45%, transparent 80%); }
 .cover-gradient-side { background: linear-gradient(to right, rgba(0,0,0,0.45) 0%, transparent 55%); }
-.cover-vignette { background: radial-gradient(ellipse 65% 55% at 50% 50%, transparent 50%, rgba(55,35,18,0.30) 80%, rgba(40,24,10,0.60) 100%); }
+.cover-vignette { background: radial-gradient(ellipse 65% 55% at 50% 50%, transparent 50%, rgba(55,35,18,0.22) 80%, rgba(40,24,10,0.45) 100%); }
 .cover-blur-layer {
   background-size: cover;
   background-position: center;
