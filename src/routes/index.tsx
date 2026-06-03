@@ -161,7 +161,7 @@ function Home() {
         </>
       )}
 
-      <section className="bg-sand-100 dark:bg-sand-900 border-t border-sand-200 dark:border-sand-800 py-16">
+      <section className="bg-sand-100 dark:bg-sand-900 border-y border-sand-200 dark:border-sand-800 py-16">
         <div className="max-w-xl mx-auto px-6 text-center">
           <h2 className="font-cormorant font-semibold text-3xl text-sand-900 dark:text-sand-50 mb-3">Follow the story</h2>
           <p className="text-sand-600 dark:text-sand-400 text-sm mb-6 leading-relaxed">
