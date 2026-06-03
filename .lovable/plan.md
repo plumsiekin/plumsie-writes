@@ -1,65 +1,41 @@
-## Goal
+## What's wrong
 
-Your real site (the Astro "plumsiepie writes" blog + SimLit stories) lives in `src/pages/*.astro`, but Lovable's preview runs TanStack Start, which only serves `src/routes/`. I'll port the Astro site to TanStack Start so the preview shows your actual content, then remove the Astro scaffolding.
+Two regressions, both in `src/styles.css`, introduced during the Astro → TanStack port:
 
-## What gets ported
+### 1. Wordmark "place" lost its accent color
+`src/styles.css` line 296–297 has a blanket override:
+```css
+#navbar a, #navbar button, #navbar .group span { color: var(--color-sand-900); }
+html.dark #navbar a, html.dark #navbar button, html.dark #navbar .group span { color: var(--color-sand-50); }
+```
+That rule wins over the Tailwind `text-sand-400` on the `place` span in `src/components/Navbar.tsx`, so both words render in the same color (sand-900 in light mode, sand-50 in dark mode). Previously `place` was a warmer accent tone (ember/sand-400 italic).
 
-**Pages → TanStack routes (`src/routes/`)**
-- `index.astro` → `index.tsx` (home)
-- `about.astro` → `about.tsx`
-- `stories.astro` → `stories.tsx`
-- `blog/index.astro` → `blog/index.tsx`
-- `blog/[id].astro` → `blog/$id.tsx` (individual post)
-- `blog/category/[category].astro` → `blog/category/$category.tsx`
-- `story/[storyId]/index.astro` → `story/$storyId/index.tsx`
-- `story/[storyId]/characters.astro` → `story/$storyId/characters.tsx`
-- `story/[storyId]/chapter/[number].astro` → `story/$storyId/chapter/$number.tsx`
-- `tag/[tag].astro` → `tag/$tag.tsx`
-- `blog/rss.xml.ts` → `routes/api/public/rss.xml.ts` (server route)
+### 2. Hero image is invisible behind overlays
+The hero in `src/routes/index.tsx` stacks two overlays from `src/styles.css` (lines 282–283):
+```css
+.cover-gradient { background: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.18) 35%, transparent 70%); }
+.cover-gradient-side { background: linear-gradient(to right, rgba(46,26,8,0.7) 0%, transparent 60%); }
+```
+In dark mode the deep-brown side gradient (`rgba(46,26,8,0.7)`) plus the top gradient and dark page background swallow the `berrinmoore-cover.jpg` image almost entirely. The `<img>` is loading; it's just been overlaid into oblivion.
 
-**Components → React (`.astro` → `.tsx`)**
-Navbar, Footer, BaseHead-equivalent (head() in routes), Ornament, StoryCard, ChapterList, ContentWarning, AuthorByline, RelatedContent, Accordion, ScrollProgressBar, ReadingProgress.
+## Fix
 
-**Content & data**
-- `src/data/stories.ts` — already TS, used as-is.
-- `src/content/blog/*.md` — Astro content collection. I'll move these to `src/content/blog/` and read them via a small Vite glob import (`import.meta.glob`) so blog routes can list and render posts with frontmatter + markdown body.
+**Edit only `src/styles.css`** — no component changes needed.
 
-**Styling**
-- `src/styles/global.css` — port the sand palette, Cormorant/Karla fonts, dark-mode tokens, and ornament styles into `src/styles.css` as semantic design tokens (oklch) per Lovable conventions. No raw color classes in components.
+1. **Wordmark** — narrow the navbar color override so it doesn't touch the wordmark spans, and let the existing Tailwind `text-sand-400`/italic on `place` take effect. Change:
+   - `#navbar .group span` → drop `.group span` from both the light and dark rules (keep `#navbar a, #navbar button` only). The brand link's two spans then keep their `text-sand-900` and `text-sand-400 italic` classes from `Navbar.tsx`. In dark mode `text-sand-900` on the first span will be too dark, so add a targeted dark-mode rule that lightens only the *first* wordmark span (e.g. `html.dark #navbar a.group > span:first-child`) while leaving the accent `place` span at `sand-400`.
 
-**Theme toggle**
-- The inline `localStorage` theme script is browser-only. I'll move it into a client-only `ThemeProvider` that runs after hydration (no SSR access to `window`/`localStorage`).
-
-## Accessibility (per your project rules)
-
-- Keep semantic elements (`<nav>`, `<main>`, `<article>`, `<button>`, `<dialog>` where applicable).
-- Preserve heading hierarchy (one `<h1>` per page).
-- Keep alt text on all images; decorative ornaments get `alt=""`.
-- Filter buttons keep `aria-pressed` state; category chips remain real `<a>` links.
-- Maintain `:focus-visible` styles when porting CSS.
-
-## What gets removed (after port verified)
-
-- `astro.config.mjs`, `src/pages/`, `src/layouts/`, `src/components/*.astro`, `src/content.config.ts`, `tailwind.config.js` (TanStack template uses CSS-first Tailwind v4 via `src/styles.css`).
-- `astro` and related deps from `package.json`.
-
-## Out of scope
-
-- No content changes — every page renders the same copy and images.
-- No new features.
-- No backend/Cloud (not needed; content is static).
-
-## Technical notes
-
-- Markdown rendering: `import.meta.glob('/src/content/blog/*.md', { eager: true, query: '?raw', import: 'default' })` to get raw bodies, then render with `marked` + `gray-matter` (small, Worker-safe). Adds 2 deps.
-- RSS endpoint becomes a `createFileRoute('/api/public/rss.xml')` server route returning `text/xml`.
-- Route metadata (`<title>`, `description`, `og:*`) goes in each route's `head()` — distinct per page, no reuse of the home metadata.
-- `src/routes/__root.tsx` keeps `<Outlet />`; Navbar + Footer move into it so every route gets the shell.
+2. **Hero overlays** — soften both gradients so the cover image shows through while the headline stays readable:
+   - `.cover-gradient`: reduce opacities (e.g. `rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 45%, transparent 80%`) — keeps a darker band behind the title at the bottom, transparent up top.
+   - `.cover-gradient-side`: drop the side opacity (e.g. `rgba(0,0,0,0.45) 0%, transparent 55%`) and switch from the brown tint to neutral black so it stops looking like a solid brown panel.
 
 ## Verification
 
-After build:
-1. `/` shows the plumsiepie home, not the placeholder.
-2. `/blog`, `/stories`, `/about`, a sample `/blog/[slug]`, and a sample `/story/tales-of-berrinmoore/chapter/1` all render.
-3. Dark-mode toggle works without SSR hydration errors.
-4. Build passes with no unresolved imports.
+- Refresh `/` in dark mode: `Tales of Berrinmoore` cover image is clearly visible, headline + status pills remain legible against the bottom-left vignette.
+- Navbar shows `plumsie's` in the neutral wordmark color and `place` in the lighter italic accent, in both light and dark modes.
+- No other routes change appearance (only `.cover-gradient*` and `#navbar` rules touched).
+
+## Out of scope
+
+- No changes to `Navbar.tsx`, `index.tsx`, story data, or images.
+- No new tokens or assets; just CSS rule adjustments.
