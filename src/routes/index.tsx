@@ -49,8 +49,8 @@ function Home() {
           <div className="absolute inset-0 pointer-events-none cover-gradient-side" />
         <div className="cover-vignette absolute inset-0 pointer-events-none" />
 
-        <div className="relative z-10 max-w-6xl mx-auto px-6 pb-14 md:pb-20 w-full">
-          <div className="max-w-xl">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 pb-14 md:pb-20 w-full">
+          <div className="max-w-2xl">
             <div className="flex flex-wrap items-center gap-2 mb-3">
               <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${statusClasses[featured.status]}`}>
                 {statusLabels[featured.status]}
