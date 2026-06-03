@@ -40,10 +40,14 @@ function Home() {
             onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/images/placeholder-cover.jpg"; }}
           />
         </div>
+        <div
+          className="cover-blur-layer absolute inset-0 pointer-events-none"
+          style={{ backgroundImage: `url(${featured.coverImage})` }}
+          aria-hidden="true"
+        />
         <div className="cover-gradient absolute inset-0 pointer-events-none" />
           <div className="absolute inset-0 pointer-events-none cover-gradient-side" />
         <div className="cover-vignette absolute inset-0 pointer-events-none" />
-        <div className="cover-blur absolute inset-0 pointer-events-none" />
 
         <div className="relative z-10 max-w-6xl mx-auto px-6 pb-14 md:pb-20 w-full">
           <div className="max-w-xl">
