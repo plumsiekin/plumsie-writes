@@ -77,7 +77,7 @@ function BlogPost() {
             params={{ category: post.category }}
             className="border border-sand-200 dark:border-sand-700 px-2 py-0.5 rounded-full hover:border-sand-400 dark:hover:border-sand-500 transition-colors"
           >
-            {categoryLabels[post.category]}
+            {categoryLabels[post.category as keyof typeof categoryLabels]}
           </Link>
           <time dateTime={post.date}>{formattedDate}</time>
           <span>~{post.readingTime} min read</span>
