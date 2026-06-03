@@ -29,7 +29,7 @@ function Home() {
     <div className="-mt-20">
       <section
         className="relative flex items-end overflow-hidden"
-        style={{ height: "clamp(480px, 62vh, 680px)" }}
+        style={{ height: "clamp(540px, 70vh, 760px)" }}
         aria-label="Featured story"
       >
         <div className="absolute inset-0 overflow-hidden">
