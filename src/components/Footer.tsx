@@ -34,7 +34,7 @@ export function Footer() {
 
           <div>
             <h3 className="text-sand-400 text-xs uppercase tracking-widest mb-4">Find me</h3>
-            <div className="flex flex-col gap-2 mb-6">
+            <div className="flex flex-col gap-2">
               <a
                 href="https://twitch.tv/plumsieco"
                 target="_blank"
