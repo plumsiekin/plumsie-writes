@@ -5,10 +5,10 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
           <div>
             <a href="/" className="flex items-baseline gap-2 group mb-3">
-              <span className="font-cormorant font-semibold text-2xl text-sand-900 tracking-tight group-hover:text-sand-700 transition-colors">
+              <span className="font-cormorant font-semibold text-2xl text-sand-50 tracking-tight group-hover:text-sand-200 transition-colors">
                 plumsie
               </span>
-              <span className="font-cormorant font-semibold text-2xl text-sand-400 italic tracking-tight group-hover:text-sand-700 transition-colors">
+              <span className="font-cormorant font-semibold text-2xl text-sand-400 italic tracking-tight group-hover:text-sand-200 transition-colors">
                 stories
               </span>
             </a>
