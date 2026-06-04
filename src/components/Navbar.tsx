@@ -68,7 +68,7 @@ export function Navbar() {
           <button
             onClick={toggleTheme}
             aria-label="Toggle dark mode"
-            className="w-8 h-8 flex items-center justify-center rounded-full text-sand-600 dark:text-sand-400 hover:text-sand-800 dark:hover:text-sand-100 hover:bg-sand-800 dark:hover:bg-sand-100 transition-colors"
+            className="w-8 h-8 flex items-center justify-center rounded-full text-sand-400 dark:text-sand-600 hover:text-sand-100 dark:hover:text-sand-800 hover:bg-sand-800 dark:hover:bg-sand-100 transition-colors"
           >
             {isDark ? (
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
