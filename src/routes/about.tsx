@@ -45,7 +45,7 @@ function About() {
         <h2 className="font-cormorant font-semibold text-2xl text-sand-900 dark:text-sand-50 mb-4">Find me</h2>
         <div className="flex flex-col gap-3">
           <a
-            href="https://twitch.tv/shashabloe"
+            href="https://twitch.tv/plumsieco"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 hover:text-sand-800 dark:hover:text-sand-100 transition-colors"
