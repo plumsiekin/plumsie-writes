@@ -34,7 +34,7 @@ export function Footer() {
 
           <div>
             <h3 className="text-sand-400 text-xs uppercase tracking-widest mb-4">Find me</h3>
-            <div className="flex flex-col gap-2 mb-6">
+            <div className="flex flex-col gap-2">
               <a
                 href="https://twitch.tv/plumsieco"
                 target="_blank"
@@ -70,23 +70,6 @@ export function Footer() {
               </a>
             </div>
 
-            <form className="flex gap-2" onSubmit={(e) => e.preventDefault()}>
-              <label className="sr-only" htmlFor="footer-email">
-                Email address
-              </label>
-              <input
-                id="footer-email"
-                type="email"
-                placeholder="your@email.com"
-                className="flex-1 bg-sand-900 border border-sand-700 rounded px-3 py-2 text-sm text-sand-200 placeholder-sand-600 focus:outline-none focus:border-sand-500"
-              />
-              <button
-                type="submit"
-                className="bg-sand-600 hover:bg-sand-500 text-sand-50 text-sm px-4 py-2 rounded transition-colors"
-              >
-                Follow
-              </button>
-            </form>
           </div>
         </div>
 
