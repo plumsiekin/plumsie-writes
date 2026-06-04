@@ -1,0 +1,60 @@
+---
+import '../styles.css';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title = "Plumsie's Place — SimLit by plumsiepie",
+  description = 'SimLit fiction told through The Sims. Literary, character-driven stories in chapters.',
+  ogImage,
+} = Astro.props;
+
+const pathname = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="plumsiepie" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <!--
+      Apply saved theme before first paint to prevent a flash of
+      the wrong colour scheme. Must run synchronously in <head>.
+    -->
+    <script is:inline>
+      (function () {
+        try {
+          var s = localStorage.getItem('theme');
+          var dark = s ? s === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div
+      class="min-h-screen flex flex-col bg-sand-50 dark:bg-sand-950 text-sand-900 dark:text-sand-100 transition-colors duration-300"
+    >
+      <Navbar pathname={pathname} client:load />
+      <main class="flex-1 pt-20">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+  </body>
+</html>
