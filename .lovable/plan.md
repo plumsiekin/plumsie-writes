@@ -1,9 +1,5 @@
-Update both the navbar and footer logos to "plumsie stories" with identical styling.
+## Adjust logo word spacing
 
-1. **Navbar** (`src/components/Navbar.tsx`): Change "plumsie's place" → "plumsie stories". Keep the existing two-span structure: "plumsie" in regular weight, "stories" in italic. All existing styling (font, size, color, tracking, hover) stays the same.
+In both `src/components/Navbar.tsx` and `src/components/Footer.tsx`, the logo consists of two `<span>` elements inside a flex container with `gap-2` (0.5rem / 8px). The spacing feels too wide.
 
-2. **Footer** (`src/components/Footer.tsx`): Replace "plumsiepie writes" with "plumsie stories", replicating the navbar logo's exact layout and typography:
-   - Wrap in `flex items-baseline gap-2 group`
-   - "plumsie": `font-cormorant font-semibold text-2xl tracking-tight` (adapted to `text-sand-50` for dark footer visibility, with matching hover)
-   - "stories": `font-cormorant font-semibold text-2xl italic tracking-tight` (adapted to a muted dark-mode tone, with matching hover)
-   - Retain the transition-colors and group-hover behavior
+**Change:** Replace `gap-2` with `gap-1` (0.25rem) on the logo link in both files. This moves "plumsie" and "stories" closer together to roughly the width of a single space character at the `text-2xl` font size.

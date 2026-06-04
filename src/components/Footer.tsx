@@ -4,7 +4,7 @@ export function Footer() {
       <div className="max-w-6xl mx-auto px-6 pt-16 pb-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
           <div>
-            <a href="/" className="flex items-baseline gap-2 group mb-3">
+            <a href="/" className="flex items-baseline gap-1 group mb-3">
               <span className="font-cormorant font-semibold text-2xl text-sand-50 tracking-tight group-hover:text-sand-50 transition-colors">
                 plumsie
               </span>
