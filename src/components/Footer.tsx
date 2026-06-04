@@ -4,9 +4,13 @@ export function Footer() {
       <div className="max-w-6xl mx-auto px-6 pt-16 pb-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
           <div>
-            <a href="/" className="inline-block mb-3">
-              <span className="font-cormorant font-semibold text-2xl text-sand-50">plumsiepie</span>
-              <span className="text-sand-600 italic text-sm ml-1.5 font-cormorant">writes</span>
+            <a href="/" className="flex items-baseline gap-2 group mb-3">
+              <span className="font-cormorant font-semibold text-2xl text-sand-900 tracking-tight group-hover:text-sand-700 transition-colors">
+                plumsie
+              </span>
+              <span className="font-cormorant font-semibold text-2xl text-sand-400 italic tracking-tight group-hover:text-sand-700 transition-colors">
+                stories
+              </span>
             </a>
             <p className="text-sand-600 text-sm leading-relaxed">Game-inspired fiction, told in chapters.</p>
             <p className="text-sand-600 text-xs mt-4">Made with ♥ in The Sims</p>
