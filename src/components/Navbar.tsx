@@ -42,7 +42,7 @@ export function Navbar() {
       }`}
     >
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link to="/" className="flex items-baseline gap-1 group">
+        <Link to="/" className="flex items-baseline gap-1.5 group">
           <span className="font-cormorant font-semibold text-2xl text-sand-900 tracking-tight group-hover:text-sand-900 dark:group-hover:text-sand-50 transition-colors">
             plumsie
           </span>
