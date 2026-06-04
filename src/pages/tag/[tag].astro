@@ -1,0 +1,81 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Ornament from '@/components/Ornament.astro';
+import StoryCard from '@/components/StoryCard.astro';
+import { stories, type Story } from '@/data/stories';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+
+  const genreTags = new Set(stories.flatMap((s: Story) => s.genre.map((g) => g.toLowerCase())));
+  const categoryTags = new Set(posts.map((p) => p.data.category));
+  const warningTags = new Set(stories.flatMap((s: Story) => s.contentWarnings));
+
+  const allTags = [...new Set([...genreTags, ...categoryTags, ...warningTags])];
+
+  return allTags.map((tag) => ({ params: { tag } }));
+}
+
+const { tag } = Astro.params;
+
+const matchedStories = stories.filter(
+  (s: Story) =>
+    s.genre.map((g) => g.toLowerCase()).includes(tag) ||
+    s.contentWarnings.includes(tag)
+);
+
+const allPosts = (await getCollection('blog')).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+const matchedPosts = allPosts.filter((p) => p.data.category === tag);
+---
+
+<Layout
+  title={`#${tag} — Plumsie's Place`}
+  description={`Stories and posts tagged "${tag}" on Plumsie's Place.`}
+>
+  <div class="max-w-4xl mx-auto px-6 py-16">
+    <div class="mb-10">
+      <p class="text-xs text-sand-400 uppercase tracking-widest mb-2">Tag</p>
+      <h1 class="font-cormorant font-semibold text-4xl text-sand-900 dark:text-sand-50">#{tag}</h1>
+    </div>
+
+    {matchedStories.length > 0 && (
+      <>
+        <h2 class="text-xs uppercase tracking-widest text-sand-400 mb-4">Stories</h2>
+        <div class="space-y-6 mb-12">
+          {matchedStories.map((s: Story) => <StoryCard story={s} />)}
+        </div>
+      </>
+    )}
+
+    {matchedPosts.length > 0 && (
+      <>
+        <Ornament />
+        <h2 class="text-xs uppercase tracking-widest text-sand-400 mb-4">Blog posts</h2>
+        <div class="space-y-4">
+          {matchedPosts.map((post) => (
+            <article class="flex gap-4 items-start p-4 bg-white dark:bg-sand-900 rounded-lg border border-sand-100 dark:border-sand-800">
+              <div class="flex-1">
+                <h3 class="font-cormorant font-semibold text-xl text-sand-900 dark:text-sand-50 mb-1">
+                  <a
+                    href={`/blog/${post.slug}`}
+                    class="hover:text-sand-700 dark:hover:text-sand-200 transition-colors"
+                  >
+                    {post.data.title}
+                  </a>
+                </h3>
+                <p class="text-sm text-sand-600 dark:text-sand-400">{post.data.excerpt}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </>
+    )}
+
+    {matchedStories.length === 0 && matchedPosts.length === 0 && (
+      <p class="text-sand-400 dark:text-sand-600 text-sm">Nothing tagged "{tag}" yet.</p>
+    )}
+  </div>
+</Layout>

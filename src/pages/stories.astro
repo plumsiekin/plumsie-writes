@@ -1,0 +1,104 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Ornament from '@/components/Ornament.astro';
+import StoryCard from '@/components/StoryCard.astro';
+import { stories } from '@/data/stories';
+---
+
+<Layout
+  title="The Library — Plumsie's Place"
+  description="All stories by plumsiepie. Browse SimLit fiction in chapters — literary, melancholy-romantic, and game-inspired."
+>
+  <div class="max-w-4xl mx-auto px-6 py-16">
+    <div class="mb-12 text-center">
+      <h1 class="font-cormorant font-semibold text-5xl text-sand-900 dark:text-sand-50 mb-3">The Library</h1>
+      <p class="text-sand-600 dark:text-sand-400 text-sm mb-3">
+        {stories.length} {stories.length === 1 ? 'story' : 'stories'}
+      </p>
+      <p class="text-sand-600 dark:text-sand-400 text-sm">
+        Looking for writing tips and behind-the-scenes posts?{' '}
+        <a
+          href="/blog"
+          class="text-sand-700 dark:text-sand-300 underline underline-offset-2 hover:text-sand-900 dark:hover:text-sand-100 transition-colors"
+        >
+          Visit the blog →
+        </a>
+      </p>
+    </div>
+
+    <Ornament />
+
+    <div class="flex flex-wrap gap-2 mb-8" role="group" aria-label="Filter by status">
+      {(['all', 'ongoing', 'complete', 'hiatus'] as const).map((f) => (
+        <button
+          data-filter={f}
+          aria-pressed={f === 'all' ? 'true' : 'false'}
+          class="filter-btn text-sm px-4 py-1.5 rounded-full border transition-colors"
+        >
+          {f === 'all' ? 'All' : f === 'hiatus' ? 'On Hiatus' : f.charAt(0).toUpperCase() + f.slice(1)}
+        </button>
+      ))}
+    </div>
+
+    <div id="stories-grid" class="space-y-6">
+      {stories.map((story) => <StoryCard story={story} />)}
+    </div>
+
+    <p
+      id="stories-empty"
+      class="hidden text-center text-sand-400 dark:text-sand-600 py-12 text-sm"
+      aria-live="polite"
+    >
+      No stories in this category yet.
+    </p>
+  </div>
+</Layout>
+
+<style>
+  .filter-btn {
+    background: transparent;
+    color: var(--color-sand-600);
+    border-color: var(--color-sand-300);
+  }
+  .filter-btn:hover {
+    border-color: var(--color-sand-500);
+  }
+  .filter-btn[aria-pressed='true'] {
+    background-color: var(--color-sand-800);
+    color: var(--color-sand-50);
+    border-color: var(--color-sand-800);
+  }
+  :global(html.dark) .filter-btn {
+    color: var(--color-sand-400);
+    border-color: var(--color-sand-700);
+  }
+  :global(html.dark) .filter-btn[aria-pressed='true'] {
+    background-color: var(--color-sand-600);
+    border-color: var(--color-sand-600);
+    color: var(--color-sand-50);
+  }
+</style>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const cards = document.querySelectorAll<HTMLElement>('#stories-grid article');
+  const empty = document.getElementById('stories-empty');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter!;
+
+      buttons.forEach((b) => b.setAttribute('aria-pressed', 'false'));
+      btn.setAttribute('aria-pressed', 'true');
+
+      let visible = 0;
+      cards.forEach((card) => {
+        const show = filter === 'all' || card.dataset.status === filter;
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+
+      if (empty) empty.classList.toggle('hidden', visible > 0);
+    });
+  });
+</script>
