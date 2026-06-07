@@ -18,6 +18,7 @@ Credit:
 
 <title>{Title}{block:TagPage} — {lang:Posts tagged Tag}{/block:TagPage}{block:SearchPage} — {lang:Search results for SearchQuery}{/block:SearchPage}{block:PermalinkPage}{block:PostSummary} — {PostSummary}{/block:PostSummary}{/block:PermalinkPage}</title>
 
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23663c14'/><text x='16' y='22' text-anchor='middle' font-family='serif' font-size='18' font-weight='bold' fill='%23f9edd8'>✦</text></svg>">
 <link rel="shortcut icon" href="{Favicon}">
 <link rel="alternate" type="application/rss+xml" href="{RSS}">
 <script src="https://static.tumblr.com/05ejowb/RA6r1jy9i/render.js"></script>
@@ -76,9 +77,9 @@ Credit:
 <meta name="select:Header Style" title="Lowercase" content="lowercase">
 <meta name="select:Header Style" title="Capitalize" content="capitalize">
 
-<meta name="select:Post Size" title="Small" content="35vw">
-<meta name="select:Post Size" title="Medium" content="40vw">
-<meta name="select:Post Size" title="Large" content="45vw">
+<meta name="select:Post Size" title="Small" content="38vw">
+<meta name="select:Post Size" title="Medium" content="44vw">
+<meta name="select:Post Size" title="Large" content="50vw">
 
 <meta name="select:Borders Style" title="Solid" content="solid">
 <meta name="select:Borders Style" title="Dashed" content="dash">
@@ -307,14 +308,18 @@ body.light, [data-theme="daynight"] body.dark {
 }
 
 /* Ken Burns effect on header cover image */
-.cover { overflow: hidden; }
+.cover { overflow: hidden; display: block; line-height: 0; }
 .cover img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     animation: kenBurns 20s ease-in-out infinite alternate;
     transform-origin: center center;
 }
 @keyframes kenBurns {
-    from { transform: scale(1); }
-    to   { transform: scale(1.08); }
+    from { transform: scale(1.05); }
+    to   { transform: scale(1.13); }
 }
 
 /* Design system shadows on posts and sidebar */
@@ -330,6 +335,12 @@ body.light, [data-theme="daynight"] body.dark {
 .asker span, .p-title, .site-info span {
     font-family: 'Cormorant Garamond', Georgia, serif;
 }
+
+/* Center header logo and search bar vertically */
+.head-title { display: flex; align-items: center; gap: 0.75em; }
+
+/* Wordmark SVG in header */
+.site-wordmark-svg { height: 30px; width: auto; display: block; flex-shrink: 0; }
 
 /* Header avatar — larger, fully rounded (radius-full) */
 .head-title img {
@@ -452,7 +463,7 @@ body.dark .cover::after {
 
 <header class="flex justify center">
 <div class="head-title">
-<img src="{image:Site Logo}" alt=""><div class="search" style="{block:HideFromSearchEnabled}display:none!important;{/block:HideFromSearchEnabled}"><form action="/search" method="get"><input class="searchbar" type="text" name="q" placeholder="Search" value="{SearchQuery}" autocomplete="off"/></form></div> <!--- SEARCH --->
+<svg class="site-wordmark-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 44" aria-label="plumsiepie writes"><text x="0" y="32" font-family="Cormorant, serif" font-weight="600" font-size="34" letter-spacing="-0.5" fill="#fdf8f0">plumsiepie</text><text x="186" y="32" font-family="Cormorant, serif" font-style="italic" font-size="18" fill="#a86820">writes</text></svg><div class="search" style="{block:HideFromSearchEnabled}display:none!important;{/block:HideFromSearchEnabled}"><form action="/search" method="get"><input class="searchbar" type="text" name="q" placeholder="Search" value="{SearchQuery}" autocomplete="off"/></form></div> <!--- SEARCH --->
 {block:HideFromSearchEnabled}{block:ifNotCustomTitle}{Title}{/block:ifNotCustomTitle}{block:ifCustomTitle}{text:Custom Title}{/block:ifCustomTitle}{/block:HideFromSearchEnabled}
 </div>
 <nav>
@@ -568,14 +579,13 @@ Please view the theme guide for Vermilion if you want to add more tabs/tab butto
 <h2>{text:Updates Title}</h2>
 <div class="updates">{text:Updates}</div>
 {/block:ifUpdates} <!--- UPDATES --->
-{block:ifDiscordServerID}
 <div id="discord-status-widget">
   <div class="discord-loading"><i class="bx bx-loader-alt bx-spin"></i> Loading Discord…</div>
 </div>
 <script>
 (function(){
   var sid = '{text:Discord Server ID}';
-  if (!sid) return;
+  if (!sid) { var el = document.getElementById('discord-status-widget'); if (el) el.style.display = 'none'; return; }
   fetch('https://discord.com/api/guilds/' + sid + '/widget.json')
     .then(function(r){ return r.json(); })
     .then(function(d){
@@ -599,7 +609,6 @@ Please view the theme guide for Vermilion if you want to add more tabs/tab butto
     });
 })();
 </script>
-{/block:ifDiscordServerID}
 </div>
 <div id="tab_d" class="tab">
 <h2>{text:Status Title}</h2>
