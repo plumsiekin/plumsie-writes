@@ -18,7 +18,7 @@ Credit:
 
 <title>{Title}{block:TagPage} — {lang:Posts tagged Tag}{/block:TagPage}{block:SearchPage} — {lang:Search results for SearchQuery}{/block:SearchPage}{block:PermalinkPage}{block:PostSummary} — {PostSummary}{/block:PostSummary}{/block:PermalinkPage}</title>
 
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23663c14'/><text x='16' y='22' text-anchor='middle' font-family='serif' font-size='18' font-weight='bold' fill='%23f9edd8'>✦</text></svg>">
+<link rel="icon" type="image/svg+xml" href="https://raw.githubusercontent.com/plumsiekin/plumsie-writes/main/public/favicon.svg">
 <link rel="shortcut icon" href="{Favicon}">
 <link rel="alternate" type="application/rss+xml" href="{RSS}">
 <script src="https://static.tumblr.com/05ejowb/RA6r1jy9i/render.js"></script>
@@ -200,7 +200,9 @@ Credit:
 <meta name="text:Visits" content="Insert Link here.">
 <meta name="text:Disclaimer Title" content="Disclaimer">
 <meta name="text:Disclaimer" content="Disclaimer here.">
-<meta name="text:Discord Server ID" content="">
+<meta name="text:Twitch Username" content="">
+<meta name="text:Twitch Client ID" content="">
+<meta name="text:Twitch Client Secret" content="">
 <meta name="text:&#x2584;&#x2580;&#x2584;&#x2580; About (Tab 2) &#x2580;&#x2584;&#x2580;&#x2584;" content="">
 <meta name="text:About 2 Title" content="More About">
 <meta name="text:About 2 Info" content="">
@@ -339,8 +341,26 @@ body.light, [data-theme="daynight"] body.dark {
 /* Center header logo and search bar vertically */
 .head-title { display: flex; align-items: center; gap: 0.75em; }
 
-/* Wordmark SVG in header */
-.site-wordmark-svg { height: 30px; width: auto; display: block; flex-shrink: 0; }
+/* Wordmark text in header */
+.site-wordmark {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
+    font-size: 1.55em;
+    letter-spacing: -0.02em;
+    color: var(--head-text);
+    white-space: nowrap;
+    line-height: 1;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+.site-wordmark-accent {
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.6em;
+    color: var(--ds-sand-400);
+    margin-left: 0.18em;
+    vertical-align: 0.1em;
+}
 
 /* Header avatar — larger, fully rounded (radius-full) */
 .head-title img {
@@ -383,70 +403,99 @@ body.dark .cover::after {
     pointer-events: none;
 }
 
-/* ─── Discord API widget ───────────────────────────────── */
-#discord-status-widget {
-    padding: 0.85em 1em;
-    background: rgba(88,101,242,0.06);
-    border: 1px solid rgba(88,101,242,0.16);
+/* ─── Twitch status widget ──────────────────────────────── */
+#twitch-status-widget { margin-top: 1em; font-size: 0.82em; }
+.tw-loading { color: var(--permalink); font-style: italic; display: flex; align-items: center; gap: 0.4em; }
+.tw-error { color: var(--permalink); font-style: italic; font-size: 0.9em; }
+.tw-widget {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 10px 10px;
     border-radius: var(--ds-radius);
-    margin-top: 1em;
-    font-size: 0.85em;
+    background: linear-gradient(150deg, #18103a, #1e1535);
+    color: #fff;
+    line-height: 1.3;
+    text-align: center;
 }
-.discord-loading {
-    color: var(--permalink);
-    font-style: italic;
+.tw-live { animation: twLivePulse 2s ease-in-out infinite; }
+@keyframes twLivePulse {
+    0%, 100% { box-shadow: 0 0 0px rgba(145,70,255,0); }
+    50%       { box-shadow: 0 0 14px rgba(145,70,255,0.45); }
+}
+.tw-offline { opacity: 0.88; }
+.tw-avatar-wrap {
+    position: relative;
+    width: 56px;
+    height: 56px;
     display: flex;
     align-items: center;
-    gap: 0.4em;
-}
-.dw-name {
-    font-weight: 700;
-    color: #5865f2;
-    margin-bottom: 0.4em;
-    display: flex;
-    align-items: center;
-    gap: 0.35em;
-}
-.dw-online {
-    display: flex;
-    align-items: center;
-    gap: 0.4em;
-    margin-bottom: 0.5em;
-    color: var(--text);
-}
-.dw-dot {
-    width: 8px;
-    height: 8px;
-    background: #23a55a;
-    border-radius: var(--ds-radius-full);
+    justify-content: center;
     flex-shrink: 0;
+    text-decoration: none;
 }
-.dw-avatars {
-    display: flex;
-    gap: 4px;
-    flex-wrap: wrap;
-    margin-bottom: 0.6em;
-}
-.dw-avatars img {
-    width: 28px;
-    height: 28px;
+.tw-avatar {
+    width: 48px;
+    height: 48px;
     border-radius: var(--ds-radius-full);
     object-fit: cover;
-    opacity: 1;
+    display: block;
+    border: 2px solid rgba(145,70,255,0.5);
+    position: relative;
+    z-index: 1;
+    opacity: 1 !important;
 }
-.dw-join {
-    display: inline-block;
-    background: #5865f2;
-    color: #fff !important;
-    padding: 0.3em 0.9em;
-    border-radius: var(--ds-radius-sm);
-    font-size: 0.82em;
+.tw-avatar-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--ds-radius-full);
+    border: 2px solid #ff4b4b;
+    animation: twRingPulse 1.5s ease-in-out infinite;
+}
+@keyframes twRingPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.5; transform: scale(1.1); }
+}
+.tw-info { width: 100%; display: flex; flex-direction: column; gap: 4px; align-items: center; }
+.tw-top { display: flex; align-items: center; justify-content: center; gap: 5px; width: 100%; flex-wrap: wrap; }
+.tw-logo { width: 12px; height: 12px; flex-shrink: 0; }
+.tw-name { font-size: 0.85em; font-weight: 700; color: #bf94ff; }
+.tw-dot { width: 7px; height: 7px; border-radius: var(--ds-radius-full); flex-shrink: 0; }
+.tw-live .tw-dot { background: #ff4b4b; box-shadow: 0 0 5px rgba(255,75,75,0.8); animation: twDotBlink 1.2s ease-in-out infinite; }
+.tw-offline .tw-dot { background: #666; }
+@keyframes twDotBlink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.3; }
+}
+.tw-status { font-size: 0.75em; font-weight: 600; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.04em; }
+.tw-title { font-size: 0.82em; color: rgba(255,255,255,0.9); font-weight: 500; word-break: break-word; }
+.tw-desc  { font-size: 0.78em; color: rgba(255,255,255,0.5); font-style: italic; word-break: break-word; }
+.tw-meta { display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; width: 100%; }
+.tw-tag { font-size: 0.78em; background: rgba(145,70,255,0.25); color: #bf94ff; padding: 1px 7px; border-radius: var(--ds-radius-full); border: 1px solid rgba(145,70,255,0.35); white-space: nowrap; }
+.tw-stat { font-size: 0.78em; color: rgba(255,255,255,0.45); display: flex; align-items: center; gap: 4px; }
+.tw-vdot { width: 6px; height: 6px; border-radius: var(--ds-radius-full); background: #ff4b4b; flex-shrink: 0; }
+.tw-sched { font-size: 0.78em; color: rgba(255,255,255,0.45); }
+.tw-actions { display: flex; flex-direction: column; gap: 5px; width: 100%; }
+.tw-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: var(--ds-radius-full);
+    font-size: 0.8em;
     font-weight: 600;
     text-decoration: none !important;
-    transition: background 200ms var(--ds-ease);
+    white-space: nowrap;
+    color: #fff !important;
+    transition: opacity 0.12s ease, transform 0.12s ease;
+    line-height: 1;
 }
-.dw-join:hover { background: #4752c4 !important; color: #fff !important; }
-.dw-error { color: var(--permalink); font-style: italic; }
+.tw-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+.tw-btn-watch { background: #ff4b4b; }
+.tw-btn-dot { width: 6px; height: 6px; border-radius: var(--ds-radius-full); background: rgba(255,255,255,0.85); flex-shrink: 0; animation: twDotBlink 1.2s ease-in-out infinite; }
+.tw-btn-follow { background: linear-gradient(135deg, #9146ff, #772ce8); }
 
 {CustomCSS}
 </style>
@@ -463,7 +512,7 @@ body.dark .cover::after {
 
 <header class="flex justify center">
 <div class="head-title">
-<svg class="site-wordmark-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 44" aria-label="plumsiepie writes"><text x="0" y="32" font-family="Cormorant, serif" font-weight="600" font-size="34" letter-spacing="-0.5" fill="#fdf8f0">plumsiepie</text><text x="186" y="32" font-family="Cormorant, serif" font-style="italic" font-size="18" fill="#a86820">writes</text></svg><div class="search" style="{block:HideFromSearchEnabled}display:none!important;{/block:HideFromSearchEnabled}"><form action="/search" method="get"><input class="searchbar" type="text" name="q" placeholder="Search" value="{SearchQuery}" autocomplete="off"/></form></div> <!--- SEARCH --->
+<span class="site-wordmark" aria-label="plumsiepie writes">plumsiepie<em class="site-wordmark-accent">writes</em></span><div class="search" style="{block:HideFromSearchEnabled}display:none!important;{/block:HideFromSearchEnabled}"><form action="/search" method="get"><input class="searchbar" type="text" name="q" placeholder="Search" value="{SearchQuery}" autocomplete="off"/></form></div> <!--- SEARCH --->
 {block:HideFromSearchEnabled}{block:ifNotCustomTitle}{Title}{/block:ifNotCustomTitle}{block:ifCustomTitle}{text:Custom Title}{/block:ifCustomTitle}{/block:HideFromSearchEnabled}
 </div>
 <nav>
@@ -579,34 +628,87 @@ Please view the theme guide for Vermilion if you want to add more tabs/tab butto
 <h2>{text:Updates Title}</h2>
 <div class="updates">{text:Updates}</div>
 {/block:ifUpdates} <!--- UPDATES --->
-<div id="discord-status-widget">
-  <div class="discord-loading"><i class="bx bx-loader-alt bx-spin"></i> Loading Discord…</div>
-</div>
+<div id="twitch-status-widget"><div class="tw-loading"><i class="bx bx-loader-alt bx-spin"></i> Loading Twitch…</div></div>
 <script>
 (function(){
-  var sid = '{text:Discord Server ID}';
-  if (!sid) { var el = document.getElementById('discord-status-widget'); if (el) el.style.display = 'none'; return; }
-  fetch('https://discord.com/api/guilds/' + sid + '/widget.json')
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      var el = document.getElementById('discord-status-widget');
-      var members = (d.members || []).slice(0, 6);
-      var html = '<div class="dw-name"><i class="bx bxl-discord-alt"></i>' + (d.name || 'Discord') + '</div>';
-      html += '<div class="dw-online"><span class="dw-dot"></span>' + (d.presence_count || 0) + ' online</div>';
-      if (members.length) {
-        html += '<div class="dw-avatars">';
-        members.forEach(function(m){
-          if (m.avatar_url) html += '<img src="' + m.avatar_url + '" alt="' + m.username + '" title="' + m.username + '">';
-        });
-        html += '</div>';
-      }
-      if (d.instant_invite) html += '<a href="' + d.instant_invite + '" target="_blank" class="dw-join">Join Server</a>';
-      el.innerHTML = html;
-    })
-    .catch(function(){
-      var el = document.getElementById('discord-status-widget');
-      if (el) el.innerHTML = '<div class="dw-error">Discord unavailable — ensure the server widget is enabled in Server Settings.</div>';
+  var user = '{text:Twitch Username}';
+  var cid  = '{text:Twitch Client ID}';
+  var csec = '{text:Twitch Client Secret}';
+  var el   = document.getElementById('twitch-status-widget');
+  if (!user || !cid || !csec) {
+    el.innerHTML = '<div class="tw-error"><i class="bx bxl-twitch"></i> Add your Twitch Username, Client ID and Client Secret in the Tumblr customizer to show live stream status here.</div>';
+    return;
+  }
+  el.innerHTML = '<div class="tw-loading"><i class="bx bx-loader-alt bx-spin"></i> Loading Twitch…</div>';
+  fetch('https://id.twitch.tv/oauth2/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'client_id=' + encodeURIComponent(cid) + '&client_secret=' + encodeURIComponent(csec) + '&grant_type=client_credentials'
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(tok){
+    if (!tok.access_token) throw new Error('no token');
+    var h = { 'Client-ID': cid, 'Authorization': 'Bearer ' + tok.access_token };
+    return Promise.all([
+      fetch('https://api.twitch.tv/helix/users?login=' + encodeURIComponent(user), { headers: h }).then(function(r){ return r.json(); }),
+      fetch('https://api.twitch.tv/helix/streams?user_login=' + encodeURIComponent(user), { headers: h }).then(function(r){ return r.json(); })
+    ]);
+  })
+  .then(function(res){
+    var userData   = res[0].data && res[0].data[0];
+    var streamData = res[1].data && res[1].data[0];
+    renderWidget(el, {
+      isLive:     !!streamData,
+      name:       userData ? userData.display_name : user,
+      avatar:     userData ? userData.profile_image_url : '',
+      streamData: streamData || null,
+      user:       user
     });
+  })
+  .catch(function(){
+    el.innerHTML = '<div class="tw-error">Could not load Twitch data — check that your Client ID and Secret are correct.</div>';
+  });
+  function fmt(n) {
+    if (n >= 1000000) return (n/1000000).toFixed(1) + 'M';
+    if (n >= 1000)    return (n/1000).toFixed(1) + 'K';
+    return '' + n;
+  }
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function renderWidget(el, d) {
+    var url = 'https://twitch.tv/' + encodeURIComponent(d.user);
+    var cls = d.isLive ? 'tw-live' : 'tw-offline';
+    var html = '<div class="tw-widget ' + cls + '">';
+    html += '<a href="' + url + '" target="_blank" rel="noopener" class="tw-avatar-wrap">';
+    if (d.avatar) html += '<img src="' + esc(d.avatar) + '" alt="' + esc(d.name) + ' on Twitch" class="tw-avatar">';
+    if (d.isLive) html += '<span class="tw-avatar-ring"></span>';
+    html += '</a>';
+    html += '<div class="tw-info">';
+    html += '<div class="tw-top">';
+    html += '<svg class="tw-logo" viewBox="0 0 2400 2800" aria-hidden="true"><path fill="#fff" d="M500 0L0 500v1700h600v600l600-600h500l700-700V0H500zm1700 1400l-400 400h-500l-400 400v-400H400V200h1800v1200z"/><path fill="#fff" d="M1700 550h200v700h-200zM1200 550h200v700h-200z"/></svg>';
+    html += '<span class="tw-name">' + esc(d.name) + '</span>';
+    html += '<span class="tw-dot" aria-hidden="true"></span>';
+    html += '<span class="tw-status">' + (d.isLive ? 'Live' : 'Offline') + '</span>';
+    html += '</div>';
+    if (d.isLive && d.streamData) {
+      if (d.streamData.title) html += '<div class="tw-title">' + esc(d.streamData.title) + '</div>';
+      html += '<div class="tw-meta">';
+      if (d.streamData.game_name) html += '<span class="tw-tag">' + esc(d.streamData.game_name) + '</span>';
+      if (d.streamData.viewer_count != null) html += '<span class="tw-stat"><span class="tw-vdot" aria-hidden="true"></span>' + esc(fmt(d.streamData.viewer_count)) + ' watching</span>';
+      html += '</div>';
+    } else {
+      html += '<div class="tw-desc">Calm creative sessions — write, build, or just vibe along.</div>';
+      html += '<div class="tw-meta"><span class="tw-sched">Mon · Wed · Fri</span></div>';
+    }
+    html += '</div>';
+    html += '<div class="tw-actions">';
+    if (d.isLive) html += '<a href="' + url + '" target="_blank" rel="noopener" class="tw-btn tw-btn-watch"><span class="tw-btn-dot" aria-hidden="true"></span>Watch live</a>';
+    html += '<a href="' + url + '" target="_blank" rel="noopener" class="tw-btn tw-btn-follow">Follow</a>';
+    html += '</div>';
+    html += '</div>';
+    el.innerHTML = html;
+  }
 })();
 </script>
 </div>
