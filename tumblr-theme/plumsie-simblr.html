@@ -106,15 +106,6 @@
   <style>
     /* ─── DESIGN TOKENS ──────────────────────────────── */
     :root {
-      --bg:            {color:Background};
-      --text:          {color:Text};
-      --accent:        {color:Accent};
-      --highlight:     {color:Highlight};
-      --header-bg:     {color:Header Background};
-      --sidebar-bg:    {color:Sidebar Background};
-      --border:        {color:Border};
-      --post-bg:       {color:Post Background};
-
       --sand-50:   #fdf8f0;
       --sand-100:  #f9edd8;
       --sand-200:  #f2d9b0;
@@ -141,6 +132,19 @@
       --shadow-md: 0 4px 12px rgba(74,44,16,.10), 0 2px 4px rgba(74,44,16,.06);
       --shadow-lg: 0 12px 32px rgba(74,44,16,.14), 0 4px 8px rgba(74,44,16,.08);
 
+      --transition: 300ms ease;
+    }
+
+    /* Light mode (default) */
+    body {
+      --bg:            {color:Background};
+      --text:          {color:Text};
+      --accent:        {color:Accent};
+      --highlight:     {color:Highlight};
+      --header-bg:     {color:Header Background};
+      --sidebar-bg:    {color:Sidebar Background};
+      --border:        {color:Border};
+      --post-bg:       {color:Post Background};
       --heading:       {color:Heading};
       --link:          {color:Link};
       --drop-cap:      {color:Drop Cap};
@@ -148,8 +152,6 @@
       --sidebar-width: {text:Sidebar Width};
       --content-max:   {text:Post Width};
       --site-max:      {text:Site Width};
-
-      --transition: 300ms ease;
     }
 
     /* Dark mode */
@@ -276,6 +278,7 @@
       color: var(--sand-100);
       letter-spacing: -.02em;
       line-height: 1;
+      margin: 0;
     }
     .wordmark .tagline {
       font-family: var(--font-display);
@@ -283,6 +286,7 @@
       font-style: italic;
       color: var(--sand-400);
       line-height: 1;
+      margin: 0;
     }
     .wordmark:hover h1 { color: var(--sand-50); }
     .wordmark:hover .tagline { color: var(--ember-400); }
@@ -293,6 +297,8 @@
       align-items: center;
       gap: .25rem;
       list-style: none;
+      margin: 0;
+      padding: 0;
     }
     .primary-nav a {
       font-family: var(--font-body);
@@ -359,6 +365,9 @@
       display: flex;
       flex-direction: column;
       gap: .25rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
     }
     .mobile-nav a {
       display: block;
@@ -450,6 +459,7 @@
       color: var(--sand-50);
       letter-spacing: -.02em;
       line-height: 1.1;
+      margin: 0;
     }
     .hero-content .description {
       font-family: var(--font-body);
@@ -458,6 +468,7 @@
       max-width: 48ch;
       line-height: 1.6;
       opacity: .9;
+      margin: 0;
     }
     .scroll-cue {
       animation: scrollPulse 2.5s ease-in-out infinite;
@@ -540,12 +551,12 @@
       font-size: 1.25rem;
       font-weight: 600;
       color: var(--heading);
-      margin-bottom: .5rem;
+      margin: 0 0 .5rem;
     }
     .blog-card .description {
       font-size: .875rem;
       color: var(--text);
-      margin-bottom: 1rem;
+      margin: 0 0 1rem;
       line-height: 1.6;
     }
 
@@ -589,12 +600,15 @@
       font-size: 1rem;
       font-weight: 600;
       color: var(--heading);
-      margin-bottom: 1rem;
+      margin: 0 0 1rem;
     }
     .nav-card nav {
       display: flex;
       flex-direction: column;
       gap: .5rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
     }
     .nav-card nav a {
       font-size: .875rem;
@@ -647,7 +661,7 @@
     .ask-content p {
       font-size: .875rem;
       color: var(--text);
-      margin-bottom: .75rem;
+      margin: 0 0 .75rem;
     }
 
     /* Main content */
@@ -706,7 +720,7 @@
       font-weight: 600;
       color: var(--heading);
       line-height: 1.25;
-      margin-bottom: .75rem;
+      margin: 0 0 .75rem;
     }
     .post-title a {
       color: inherit;
@@ -726,7 +740,7 @@
       max-width: 60ch;
     }
     .post-body p {
-      margin-bottom: 1em;
+      margin: 0 0 1em;
     }
     .post-body p:last-child {
       margin-bottom: 0;
