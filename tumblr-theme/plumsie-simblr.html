@@ -6,6 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>{Title}</title>
+    <link rel="icon" href="{text:Favicon URL}" type="image/x-icon" />
+    <link rel="shortcut icon" href="{text:Favicon URL}" type="image/x-icon" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='https://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='sans-serif' fill='%23c8842a'>✦</text></svg>" type="image/svg+xml" />
 
   <!-- ═══════════════════════════════════════════════════
        TUMBLR CUSTOM THEME OPTIONS
@@ -44,6 +47,9 @@
   <meta name="if:Show Post Type Icons"        content="1" />
   <meta name="if:Show Dates"                  content="1" />
   <meta name="if:Show Note Count"             content="1" />
+  <meta name="if:Show Post Borders" content="1" />
+  <meta name="if:Show Post Shadows" content="1" />
+  <meta name="if:Show Post Grid" content="0" />
   <meta name="if:Show Tags"                   content="1" />
   <meta name="if:Show Like and Reblog"        content="1" />
   <meta name="if:Show Reblog Chain"           content="1" />
@@ -88,7 +94,9 @@
 
   <!-- — Layout sizes — -->
   <meta name="text:— Layout Sizes —"     content="" />
+  <meta name="select:Post Width" content="540">
   <meta name="text:Post Width"           content="680px" />
+  <meta name="select:Font Size" content="16">
   <meta name="text:Site Width"           content="1120px" />
   <meta name="text:Sidebar Width"        content="280px" />
 
@@ -161,22 +169,296 @@
       --transition: 300ms ease;
     }
 
-    /* ─── DARK MODE OVERRIDE ─────────────────────────── */
-    {block:ifDarkMode}
-    :root {
-      --bg:         #2e1a08;
-      --text:       #f9edd8;
-      --accent:     #dca050;
-      --highlight:  #e07040;
-      --header-bg:  #1a0e04;
-      --sidebar-bg: #3d2410;
-      --border:     #663c14;
-      --post-bg:    #4a2c10;
-      --heading:    #f9edd8;
-      --link:       #dca050;
-      --drop-cap:   #dca050;
+    /* Navigation Hub Styles */
+    .nav-hub {
+      background: var(--post-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1.75rem;
     }
-    {/block:ifDarkMode}
+
+    .nav-hub-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--heading);
+      margin-bottom: 1rem;
+    }
+
+    .nav-hub-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .nav-hub-card {
+      background: var(--sand-50);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .nav-hub-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .nav-hub-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .nav-hub-card p {
+      font-size: 0.9rem;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .nav-hub-card a {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--accent);
+      text-decoration: none;
+      margin-top: 0.5rem;
+    }
+    .nav-hub-card a:hover {
+      text-decoration: underline;
+    }
+
+    /* Hub type accents */
+    .hub-stories {
+      --hub-accent: var(--ember-400);
+    }
+    .hub-cc {
+      --hub-accent: #4a8c74;
+    }
+    .hub-recs {
+      --hub-accent: #6a5acd;
+    }
+    .hub-rules {
+      --hub-accent: var(--sand-600);
+    }
+
+    .nav-hub-card.hub-stories {
+      border-top: 4px solid var(--hub-accent);
+    }
+    .nav-hub-card.hub-cc {
+      border-top: 4px solid var(--hub-accent);
+    }
+    .nav-hub-card.hub-recs {
+      border-top: 4px solid var(--hub-accent);
+    }
+    .nav-hub-card.hub-rules {
+      border-top: 4px solid var(--hub-accent);
+    }
+
+    .nav-hub-card.hub-stories h3,
+    .nav-hub-card.hub-cc h3,
+    .nav-hub-card.hub-recs h3,
+    .nav-hub-card.hub-rules h3 {
+      color: var(--hub-accent);
+    }
+
+    .nav-hub-card.hub-stories a,
+    .nav-hub-card.hub-cc a,
+    .nav-hub-card.hub-recs a,
+    .nav-hub-card.hub-rules a {
+      color: var(--hub-accent);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      .nav-hub-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Documentation comment */
+    /*
+      NAVIGATION HUB POST ELEMENTS
+
+      To use these in a text post, add the appropriate class to a div:
+
+      - .nav-hub: Wrapper for the entire navigation hub
+      - .nav-hub-title: Section heading
+      - .nav-hub-grid: Grid container for nav cards
+      - .nav-hub-card: Individual card with title, description, and link
+
+      Hub types (add to .nav-hub-card):
+      - .hub-stories: Amber accent
+      - .hub-cc: Teal accent
+      - .hub-recs: Purple accent
+      - .hub-rules: Neutral accent
+
+      Example:
+      <div class="nav-hub">
+        <h2 class="nav-hub-title">Navigation Hub</h2>
+        <div class="nav-hub-grid">
+          <div class="nav-hub-card hub-stories">
+            <h3>Stories</h3>
+            <p>Read all the stories on this blog</p>
+            <a href="/tagged/stories">View Stories →</a>
+          </div>
+          <div class="nav-hub-card hub-cc">
+            <h3>Creative Corner</h3>
+            <p>Explore creative writing and art</p>
+            <a href="/tagged/creative">View Creative Corner →</a>
+          </div>
+        </div>
+      </div>
+    */
+
+    /* NPF Post Support */
+    .npf-image {
+      width: 100%;
+      border-radius: var(--radius);
+      margin-bottom: 1rem;
+    }
+
+    .npf-text {
+      font-family: var(--font-body);
+      font-size: 1.125rem;
+      line-height: 1.9;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+    }
+
+    .npf-heading1 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--heading);
+      margin-bottom: 1rem;
+    }
+
+    .npf-heading2 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--heading);
+      margin-bottom: 0.75rem;
+    }
+
+    .npf-quote {
+      border-left: 3px solid var(--sand-300);
+      padding: 0.5rem 0 0.5rem 1rem;
+      margin: 1em 0;
+      color: var(--sand-600);
+      font-style: italic;
+    }
+
+    .npf-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--sand-50);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+      text-decoration: none;
+    }
+
+    .npf-audio {
+      background: var(--sand-50);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .npf-video {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .npf-video iframe,
+    .npf-video video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Tabler Icons */
+    .ti {
+      font-size: 1rem;
+      vertical-align: middle;
+    }
+
+    .sidebar-nav a svg,
+    .social-link svg {
+      display: none;
+    }
+
+    .sidebar-nav a i,
+    .social-link i {
+      margin-right: 0.5rem;
+      width: 1rem;
+      height: 1rem;
+    }
+  </style>
+
+    /* ─── DARK MODE OVERRIDE ─────────────────────────── */
+    <script>
+      // Check for saved theme preference or use prefers-color-scheme
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const isDarkMode = savedTheme === 'dark' || (savedTheme !== 'light' && prefersDark);
+
+      // Apply dark mode class if needed
+      if (isDarkMode) {
+        document.documentElement.classList.add('dark');
+      }
+
+      // Function to toggle theme
+      function toggleTheme() {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      }
+    </script>
+
+    <style>
+      /* Light mode styles */
+      :root {
+        --bg:            {color:Background};
+        --text:          {color:Text};
+        --accent:        {color:Accent};
+        --highlight:     {color:Highlight};
+        --header-bg:     {color:Header Background};
+        --sidebar-bg:    {color:Sidebar Background};
+        --border:        {color:Border};
+        --post-bg:       {color:Post Background};
+        --heading:       {color:Heading};
+        --link:          {color:Link};
+        --drop-cap:      {color:Drop Cap};
+      }
+
+      /* Dark mode styles */
+      html.dark {
+        --bg:         #2e1a08;
+        --text:       #f9edd8;
+        --accent:     #dca050;
+        --highlight:  #e07040;
+        --header-bg:  #1a0e04;
+        --sidebar-bg: #3d2410;
+        --border:     #663c14;
+        --post-bg:    #4a2c10;
+        --heading:    #f9edd8;
+        --link:       #dca050;
+        --drop-cap:   #dca050;
+      }
+    </style>
 
     /* ─── HERO BACKGROUND IMAGE ─────────────────────── */
     {block:ifHeroBackground}
@@ -470,6 +752,9 @@
 
     {block:ifShowSidebar}
     /* sidebar is grid column 2 */
+    #site-sidebar {
+      display: block;
+    }
     {/block:ifShowSidebar}
 
     {block:ifnotShowSidebar}
@@ -477,7 +762,9 @@
       grid-template-columns: 1fr;
       max-width: var(--content-max);
     }
-    #site-sidebar { display: none !important; }
+    #site-sidebar {
+      display: none;
+    }
     {/block:ifnotShowSidebar}
 
     /* Wide posts option */
@@ -1330,10 +1617,7 @@
   <!-- ═══════════════════════════════════════════════════
        READING PROGRESS BAR
        ═══════════════════════════════════════════════════ -->
-  {block:ifShowReadingProgressBar}
-  <div id="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Reading progress"></div>
-  {/block:ifShowReadingProgressBar}
-
+  
   <!-- Skip link -->
   <a class="skip-link" href="#main-content">Skip to content</a>
 
@@ -1343,13 +1627,13 @@
   <header id="site-header" role="banner">
     <div class="header-inner">
 
-      <!-- Wordmark -->
+      <!-- Left: Wordmark -->
       <a class="site-wordmark" href="/" aria-label="{Title} — Home">
         <span class="name-primary">{Title}</span>
         <span class="name-secondary">{text:Tagline}</span>
       </a>
 
-      <!-- Desktop nav -->
+      <!-- Center: Primary nav (desktop only) -->
       <nav id="primary-nav" aria-label="Primary navigation">
         {block:ifNav1Name}
         <a href="{text:Nav 1 URL}">{text:Nav 1 Name}</a>
@@ -1369,21 +1653,35 @@
         {block:ifNav6Name}
         <a href="{text:Nav 6 URL}">{text:Nav 6 Name}</a>
         {/block:ifNav6Name}
-        <a href="/archive">Archive</a>
-        <a href="/tagged/simlit">SimLit</a>
       </nav>
 
-      <!-- Mobile toggle -->
-      <button
-        id="nav-toggle"
-        aria-expanded="false"
-        aria-controls="mobile-nav"
-        aria-label="Toggle navigation menu"
-      >
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </button>
+      <!-- Right: Utility buttons -->
+      <div class="header-actions">
+        <!-- Search button -->
+        <button id="search-toggle" aria-label="Search" aria-expanded="false" aria-controls="search-panel">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M15.7 14.3l-3.8-3.8A5.9 5.9 0 0013 6 6 6 0 106 6a5.9 5.9 0 003.8 1.8l3.8 3.8a.996.996 0 001.4 0 .996.996 0 000-1.4zM6 10a4 4 0 110-8 4 4 0 010 8z"/></svg>
+        </button>
+
+        <!-- Dark mode toggle -->
+        <button id="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
+          <svg id="theme-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path class="moon" d="M6.2 1C3.8 1 2.2 2.6 2.2 5s1.6 4 4 4 4-1.6 4-4-.9-4-3.3-4zm.8 6a3 3 0 100 6 3 3 0 000-6z"/>
+            <path class="sun" d="M8 12.2a4 4 0 110-8 4 4 0 010 8zm0-1a3 3 0 100-6 3 3 0 000 6z"/>
+          </svg>
+        </button>
+
+        <!-- Mobile hamburger -->
+        <button
+          id="nav-toggle"
+          aria-expanded="false"
+          aria-controls="mobile-nav"
+          aria-label="Toggle navigation menu"
+        >
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+      </div>
 
     </div>
 
@@ -1410,6 +1708,134 @@
       <li><a href="/archive">Archive</a></li>
       <li><a href="/tagged/simlit">SimLit</a></li>
     </ul>
+
+    <!-- Search panel -->
+    <div id="search-panel" class="search-panel" role="search" aria-hidden="true">
+      <form action="/search" class="search-form">
+        <input type="text" name="q" placeholder="Search..." aria-label="Search" autocomplete="off">
+        <button type="submit" aria-label="Submit search">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M15.7 14.3l-3.8-3.8A5.9 5.9 0 0013 6 6 6 0 106 6a5.9 5.9 0 003.8 1.8l3.8 3.8a.996.996 0 001.4 0 .996.996 0 000-1.4zM6 10a4 4 0 110-8 4 4 0 010 8z"/></svg>
+        </button>
+      </form>
+    </div>
+
+    <script>
+      // Search panel toggle
+      document.getElementById('search-toggle').addEventListener('click', function() {
+        const isExpanded = this.getAttribute('aria-expanded') === 'true';
+        this.setAttribute('aria-expanded', !isExpanded);
+        document.getElementById('search-panel').setAttribute('aria-hidden', isExpanded);
+        if (!isExpanded) document.querySelector('.search-form input').focus();
+      });
+
+      // Close search on Escape
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && document.getElementById('search-panel').getAttribute('aria-hidden') === 'false') {
+          document.getElementById('search-toggle').setAttribute('aria-expanded', 'false');
+          document.getElementById('search-panel').setAttribute('aria-hidden', 'true');
+        }
+      });
+
+      // Close search when clicking outside
+      document.addEventListener('click', function(e) {
+        const searchPanel = document.getElementById('search-panel');
+        const searchToggle = document.getElementById('search-toggle');
+        if (!searchPanel.contains(e.target) && !searchToggle.contains(e.target) && searchPanel.getAttribute('aria-hidden') === 'false') {
+          searchToggle.setAttribute('aria-expanded', 'false');
+          searchPanel.setAttribute('aria-hidden', 'true');
+        }
+      });
+
+      // Theme toggle icon
+      function updateThemeIcon() {
+        const isDark = document.documentElement.classList.contains('dark');
+        document.getElementById('theme-icon').querySelector('.moon').style.display = isDark ? 'block' : 'none';
+        document.getElementById('theme-icon').querySelector('.sun').style.display = isDark ? 'none' : 'block';
+      }
+
+      // Initialize theme icon
+      updateThemeIcon();
+
+      // Update icon when theme changes
+      document.getElementById('theme-toggle').addEventListener('click', updateThemeIcon);
+    </script>
+
+    <style>
+      /* Header layout */
+      .header-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      /* Primary nav (centered) */
+      #primary-nav {
+        display: flex;
+        gap: 1rem;
+        margin: 0 auto;
+      }
+
+      /* Header actions (right) */
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+      }
+
+      /* Search panel */
+      .search-panel {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--header-bg);
+        padding: .75rem 1.5rem;
+        z-index: 100;
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+      }
+      .search-panel[aria-hidden="false"] {
+        transform: translateY(0);
+      }
+
+      .search-form {
+        display: flex;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      .search-form input {
+        flex: 1;
+        padding: .5rem 1rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius) 0 0 var(--radius);
+        background: var(--post-bg);
+        color: var(--text);
+      }
+      .search-form button {
+        padding: .5rem 1rem;
+        background: var(--accent);
+        color: white;
+        border: none;
+        border-radius: 0 var(--radius) var(--radius) 0;
+        cursor: pointer;
+      }
+
+      /* Theme toggle icon */
+      #theme-icon {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+      #theme-icon .moon {
+        display: none;
+      }
+      html.dark #theme-icon .moon {
+        display: block;
+      }
+      html.dark #theme-icon .sun {
+        display: none;
+      }
+    </style>
   </header>
 
   <!-- ═══════════════════════════════════════════════════
@@ -2166,6 +2592,15 @@
             height="64"
           />
         </div>
+        <div class="sidebar-avatar-wrap">
+          <img
+            class="sidebar-avatar"
+            src="{PortraitURL-64}"
+            alt="{Title} avatar"
+            width="64"
+            height="64"
+          />
+        </div>
         <div class="sidebar-blog-body">
           <div class="sidebar-blog-title">
             <a href="/">{Title}</a>
@@ -2280,11 +2715,110 @@
             </a>
           </li>
           <li>
-            <a href="/ask">
+            <a href="/ask" id="ask-toggle">
               <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M5 3.5h6A1.5 1.5 0 0112.5 5v2.5a1.5 1.5 0 01-1.5 1.5H9l-3 3V9H5A1.5 1.5 0 013.5 7.5V5A1.5 1.5 0 015 3.5z"/></svg>
               Ask me anything
             </a>
           </li>
+
+          <!-- Inline Ask Panel -->
+          <div id="ask-panel" class="ask-panel" aria-hidden="true">
+            {block:ifFAQ}
+            <div class="ask-section">
+              <h3 class="ask-section-title">FAQ</h3>
+              <div class="ask-content">{text:FAQ}</div>
+            </div>
+            {/block:ifFAQ}
+
+            {block:ifRules}
+            <div class="ask-section">
+              <h3 class="ask-section-title">Rules & Guidelines</h3>
+              <div class="ask-content">{text:Rules}</div>
+            </div>
+            {/block:ifRules}
+
+            <div class="ask-section">
+              <a href="{AskURL}" class="ask-link">Go to Ask Form →</a>
+            </div>
+          </div>
+
+          <script>
+            // Ask panel toggle
+            document.getElementById('ask-toggle').addEventListener('click', function(e) {
+              e.preventDefault();
+              const isExpanded = this.getAttribute('aria-expanded') === 'true';
+              this.setAttribute('aria-expanded', !isExpanded);
+              document.getElementById('ask-panel').setAttribute('aria-hidden', isExpanded);
+            });
+
+            // Close ask panel on Escape
+            document.addEventListener('keydown', function(e) {
+              if (e.key === 'Escape' && document.getElementById('ask-panel').getAttribute('aria-hidden') === 'false') {
+                document.getElementById('ask-toggle').setAttribute('aria-expanded', 'false');
+                document.getElementById('ask-panel').setAttribute('aria-hidden', 'true');
+              }
+            });
+
+            // Close ask panel when clicking outside
+            document.addEventListener('click', function(e) {
+              const askPanel = document.getElementById('ask-panel');
+              const askToggle = document.getElementById('ask-toggle');
+              if (!askPanel.contains(e.target) && !askToggle.contains(e.target) && askPanel.getAttribute('aria-hidden') === 'false') {
+                askToggle.setAttribute('aria-expanded', 'false');
+                askPanel.setAttribute('aria-hidden', 'true');
+              }
+            });
+          </script>
+
+          <style>
+            /* Ask panel */
+            .ask-panel {
+              position: fixed;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background: var(--post-bg);
+              z-index: 1000;
+              padding: 2rem 1.5rem;
+              overflow-y: auto;
+              transform: translateY(-100%);
+              transition: transform 0.3s ease;
+            }
+            .ask-panel[aria-hidden="false"] {
+              transform: translateY(0);
+            }
+
+            .ask-section {
+              margin-bottom: 2rem;
+            }
+
+            .ask-section-title {
+              font-family: var(--font-display);
+              font-size: 1.25rem;
+              font-weight: 600;
+              color: var(--heading);
+              margin-bottom: 1rem;
+            }
+
+            .ask-content {
+              font-size: 1rem;
+              line-height: 1.7;
+              color: var(--text);
+            }
+
+            .ask-link {
+              display: inline-block;
+              font-family: var(--font-body);
+              font-size: 1rem;
+              color: var(--accent);
+              text-decoration: none;
+              margin-top: 1rem;
+            }
+            .ask-link:hover {
+              text-decoration: underline;
+            }
+          </style>
           {block:ifNav1Name}
           <li><a href="{text:Nav 1 URL}">
             <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4 1h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V3a2 2 0 012-2zm0 1a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1H4z"/></svg>
@@ -2349,9 +2883,19 @@
   <script>
     /* ─── Mobile nav toggle ─────────────────────────── */
     (function () {
-      var toggle  = document.getElementById('nav-toggle');
+      var toggle = document.getElementById('nav-toggle');
       var mobileNav = document.getElementById('mobile-nav');
-      if (!toggle || !mobileNav) return;
+      var primaryNav = document.getElementById('primary-nav');
+      if (!toggle || !mobileNav || !primaryNav) return;
+
+      // Show hamburger only on mobile
+      if (window.innerWidth < 680) {
+        toggle.style.display = 'flex';
+        primaryNav.style.display = 'none';
+      } else {
+        toggle.style.display = 'none';
+        primaryNav.style.display = 'flex';
+      }
 
       toggle.addEventListener('click', function () {
         var isOpen = mobileNav.classList.toggle('open');
@@ -2370,6 +2914,19 @@
       /* Close when clicking outside */
       document.addEventListener('click', function (e) {
         if (!toggle.contains(e.target) && !mobileNav.contains(e.target)) {
+          mobileNav.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      /* Handle window resize */
+      window.addEventListener('resize', function() {
+        if (window.innerWidth < 680) {
+          toggle.style.display = 'flex';
+          primaryNav.style.display = 'none';
+        } else {
+          toggle.style.display = 'none';
+          primaryNav.style.display = 'flex';
           mobileNav.classList.remove('open');
           toggle.setAttribute('aria-expanded', 'false');
         }
