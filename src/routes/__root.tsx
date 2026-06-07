@@ -85,6 +85,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "author", content: "plumsiepie" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:title", content: "Plumsie's Place — SimLit by plumsiepie" },
+      { name: "twitter:title", content: "Plumsie's Place — SimLit by plumsiepie" },
+      { property: "og:description", content: "SimLit fiction told through The Sims. Literary, character-driven stories in chapters." },
+      { name: "twitter:description", content: "SimLit fiction told through The Sims. Literary, character-driven stories in chapters." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/42b99383-434b-4931-a82a-11c1b714c3ae/id-preview-5c5370bd--c9b2739e-d466-4b11-ba43-79d112fd61b7.lovable.app-1780516699961.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/42b99383-434b-4931-a82a-11c1b714c3ae/id-preview-5c5370bd--c9b2739e-d466-4b11-ba43-79d112fd61b7.lovable.app-1780516699961.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

@@ -44,3 +44,16 @@ Before outputting any code or content, run this checklist:
 1. Can this entire layout or component be operated using only a keyboard?
 2. Are screen readers notified via ARIA attributes when JavaScript changes the UI state?
 3. Does the Markdown or HTML structure maintain a perfect, un-broken heading hierarchy?
+
+## Codestral / No-tool environment
+
+This environment has no file write, bash, or shell execution tools available.
+
+When making file changes:
+- Always output the complete corrected file contents in full in the chat
+- Never truncate, summarize, or use placeholder comments like "rest of file here"
+- Never attempt to use Write, Edit, Bash, or str_replace tools
+- If a task requires running a command, write out the exact command for the user to run manually instead
+
+When reading files:
+- Ask the user to paste the file contents into the chat if you cannot read them directly
