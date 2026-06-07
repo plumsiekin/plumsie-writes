@@ -1,0 +1,85 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Ornament from '@/components/Ornament.astro';
+import { stories, type Character, type Story } from '@/data/stories';
+
+export function getStaticPaths() {
+  return stories.map((story) => ({
+    params: { storyId: story.id },
+    props: { story },
+  }));
+}
+
+interface Props {
+  story: Story;
+}
+const { story } = Astro.props;
+
+const charNames = story.characters.map((c: Character) => c.name).join(', ');
+---
+
+<Layout
+  title={`Cast — ${story.title} — Plumsie's Place`}
+  description={`Meet the characters of ${story.title}: ${charNames}.`}
+  ogImage={story.coverImage}
+>
+  <div class="max-w-4xl mx-auto px-6 py-16">
+    <nav class="flex items-center gap-2 text-xs text-sand-400 dark:text-sand-600 mb-10" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-sand-700 dark:hover:text-sand-300 transition-colors">Home</a>
+      <span aria-hidden="true">/</span>
+      <a
+        href={`/story/${story.id}`}
+        class="hover:text-sand-700 dark:hover:text-sand-300 transition-colors"
+      >
+        {story.title}
+      </a>
+      <span aria-hidden="true">/</span>
+      <span class="text-sand-600 dark:text-sand-400">Characters</span>
+    </nav>
+
+    <div class="mb-12 text-center">
+      <p class="text-sand-400 dark:text-sand-600 text-sm mb-2 uppercase tracking-widest">{story.title}</p>
+      <h1 class="font-cormorant font-semibold text-4xl text-sand-900 dark:text-sand-50">Cast of Characters</h1>
+    </div>
+
+    <Ornament />
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+      {story.characters.map((char: Character) => (
+        <article class="bg-white dark:bg-sand-900 border border-sand-100 dark:border-sand-800 rounded-lg overflow-hidden shadow-sm">
+          <div class="aspect-[3/2] bg-sand-200 dark:bg-sand-800 overflow-hidden">
+            {char.portrait ? (
+              <img
+                src={char.portrait}
+                alt={`Portrait of ${char.name}`}
+                class="w-full h-full object-cover"
+                loading="lazy"
+                onerror="this.onerror=null;this.style.display='none'"
+              />
+            ) : (
+              <div class="w-full h-full flex items-center justify-center">
+                <span class="font-cormorant text-6xl text-sand-400 dark:text-sand-600" aria-hidden="true">
+                  {char.name[0]}
+                </span>
+              </div>
+            )}
+          </div>
+          <div class="p-6">
+            <h2 class="font-cormorant font-semibold text-2xl text-sand-900 dark:text-sand-50 mb-1">{char.name}</h2>
+            <p class="text-xs text-sand-600 dark:text-sand-400 mb-3 uppercase tracking-wide">{char.role}</p>
+            <p class="text-sm text-sand-700 dark:text-sand-300 leading-relaxed">{char.bio}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="mt-12 text-center">
+      <a
+        href={`/story/${story.id}`}
+        class="text-sm text-sand-600 dark:text-sand-400 hover:text-sand-800 dark:hover:text-sand-100 transition-colors"
+      >
+        ← Back to {story.title}
+      </a>
+    </div>
+  </div>
+</Layout>

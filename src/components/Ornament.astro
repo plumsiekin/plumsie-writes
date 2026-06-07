@@ -1,0 +1,12 @@
+---
+interface Props {
+  class?: string;
+}
+const { class: extraClass = '' } = Astro.props;
+---
+
+<div class={`ornament my-12 ${extraClass}`}>
+  <div class="line"></div>
+  <span aria-hidden="true">✦</span>
+  <div class="line"></div>
+</div>

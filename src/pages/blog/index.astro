@@ -1,0 +1,147 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Ornament from '@/components/Ornament.astro';
+import { getCollection } from 'astro:content';
+import { categoryLabels, type BlogCategory } from '@/lib/blog';
+
+const allPosts = (await getCollection('blog')).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+const categories: Array<'all' | BlogCategory> = [
+  'all', 'sims-4', 'simlit', 'cc-mods', 'gaming', 'behind-the-story',
+];
+---
+
+<Layout
+  title="From the Simmer — Blog | plumsiepie"
+  description="Writing about Sims 4, SimLit, CC & mods, and the behind-the-scenes of making game-inspired fiction. By plumsiepie."
+>
+  <div class="max-w-4xl mx-auto px-6 py-16">
+    <div class="mb-4 text-center">
+      <h1 class="font-cormorant font-semibold text-5xl text-sand-900 dark:text-sand-50 mb-3">From the Simmer</h1>
+      <p class="text-sand-600 dark:text-sand-400 text-sm mb-4">{allPosts.length} posts</p>
+      <p class="text-sand-600 dark:text-sand-400 text-sm">
+        Here for the fiction?{' '}
+        <a
+          href="/stories"
+          class="text-sand-700 dark:text-sand-300 underline underline-offset-2 hover:text-sand-900 dark:hover:text-sand-100 transition-colors"
+        >
+          Browse the stories →
+        </a>
+      </p>
+    </div>
+
+    <Ornament />
+
+    <div class="flex flex-wrap gap-2 mb-8" role="group" aria-label="Filter by category">
+      {categories.map((cat) => (
+        <button
+          data-filter={cat}
+          aria-pressed={cat === 'all' ? 'true' : 'false'}
+          class="filter-btn text-sm px-4 py-1.5 rounded-full border transition-colors"
+        >
+          {cat === 'all' ? 'All' : categoryLabels[cat as BlogCategory]}
+        </button>
+      ))}
+    </div>
+
+    <div id="posts-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      {allPosts.map((post) => {
+        const formattedDate = new Date(post.data.date).toLocaleDateString('en-GB', {
+          day: 'numeric', month: 'long', year: 'numeric',
+        });
+        return (
+          <article
+            class="group bg-white dark:bg-sand-900 border border-sand-100 dark:border-sand-800 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+            data-category={post.data.category}
+          >
+            <a href={`/blog/${post.slug}`} class="block overflow-hidden aspect-video bg-sand-200 dark:bg-sand-800">
+              <img
+                src={post.data.coverImage}
+                alt=""
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+                onerror="this.onerror=null;this.src='/images/placeholder-blog.jpg'"
+              />
+            </a>
+            <div class="p-5">
+              <div class="flex items-center gap-2 mb-3">
+                <a
+                  href={`/blog/category/${post.data.category}`}
+                  class="text-xs text-sand-600 dark:text-sand-400 border border-sand-200 dark:border-sand-700 px-2 py-0.5 rounded-full hover:border-sand-400 transition-colors"
+                >
+                  {categoryLabels[post.data.category as BlogCategory]}
+                </a>
+                <time class="text-xs text-sand-400 dark:text-sand-600" datetime={post.data.date}>
+                  {formattedDate}
+                </time>
+              </div>
+              <h2 class="font-cormorant font-semibold text-xl text-sand-900 dark:text-sand-50 mb-2 leading-snug group-hover:text-sand-700 dark:group-hover:text-sand-200 transition-colors">
+                <a href={`/blog/${post.slug}`}>{post.data.title}</a>
+              </h2>
+              <p class="text-sm text-sand-600 dark:text-sand-400 line-clamp-3">{post.data.excerpt}</p>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+
+    <p
+      id="posts-empty"
+      class="hidden text-center text-sand-400 dark:text-sand-600 py-12 text-sm"
+      aria-live="polite"
+    >
+      No posts in this category yet.
+    </p>
+  </div>
+</Layout>
+
+<style>
+  .filter-btn {
+    background: transparent;
+    color: var(--color-sand-600);
+    border-color: var(--color-sand-200);
+  }
+  .filter-btn:hover {
+    border-color: var(--color-sand-400);
+  }
+  .filter-btn[aria-pressed='true'] {
+    background-color: var(--color-sand-800);
+    color: var(--color-sand-50);
+    border-color: var(--color-sand-800);
+  }
+  :global(html.dark) .filter-btn {
+    color: var(--color-sand-400);
+    border-color: var(--color-sand-700);
+  }
+  :global(html.dark) .filter-btn[aria-pressed='true'] {
+    background-color: var(--color-sand-700);
+    border-color: var(--color-sand-700);
+    color: var(--color-sand-50);
+  }
+</style>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const cards = document.querySelectorAll<HTMLElement>('#posts-grid article');
+  const empty = document.getElementById('posts-empty');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter!;
+
+      buttons.forEach((b) => b.setAttribute('aria-pressed', 'false'));
+      btn.setAttribute('aria-pressed', 'true');
+
+      let visible = 0;
+      cards.forEach((card) => {
+        const show = filter === 'all' || card.dataset.category === filter;
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+
+      if (empty) empty.classList.toggle('hidden', visible > 0);
+    });
+  });
+</script>

@@ -1,0 +1,93 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Ornament from '@/components/Ornament.astro';
+import { getCollection } from 'astro:content';
+import { categoryLabels, categoryDescriptions, type BlogCategory } from '@/lib/blog';
+
+export async function getStaticPaths() {
+  const validCategories: BlogCategory[] = [
+    'sims-4', 'simlit', 'cc-mods', 'gaming', 'behind-the-story',
+  ];
+  const posts = await getCollection('blog');
+  return validCategories.map((category) => ({
+    params: { category },
+    props: {
+      category,
+      posts: posts
+        .filter((p) => p.data.category === category)
+        .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()),
+    },
+  }));
+}
+
+interface Props {
+  category: BlogCategory;
+  posts: Awaited<ReturnType<typeof getCollection<'blog'>>>;
+}
+const { category, posts } = Astro.props;
+
+const label = categoryLabels[category];
+const description = categoryDescriptions[category];
+---
+
+<Layout
+  title={`${label} — Blog | plumsiepie`}
+  description={description.slice(0, 160)}
+>
+  <div class="max-w-4xl mx-auto px-6 py-16">
+    <div class="mb-10">
+      <a
+        href="/blog"
+        class="text-xs text-sand-400 dark:text-sand-600 hover:text-sand-700 dark:hover:text-sand-300 transition-colors uppercase tracking-widest"
+      >
+        ← All posts
+      </a>
+      <h1 class="font-cormorant font-semibold text-4xl md:text-5xl text-sand-900 dark:text-sand-50 mt-3 mb-3">
+        {label}
+      </h1>
+      <p class="text-sand-600 dark:text-sand-400 leading-relaxed max-w-2xl">{description}</p>
+      <p class="text-xs text-sand-400 dark:text-sand-600 mt-3">
+        {posts.length} {posts.length === 1 ? 'post' : 'posts'}
+      </p>
+    </div>
+
+    <Ornament />
+
+    {posts.length > 0 ? (
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {posts.map((post) => {
+          const formattedDate = new Date(post.data.date).toLocaleDateString('en-GB', {
+            day: 'numeric', month: 'long', year: 'numeric',
+          });
+          return (
+            <article class="group bg-white dark:bg-sand-900 border border-sand-100 dark:border-sand-800 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+              <a
+                href={`/blog/${post.slug}`}
+                class="block overflow-hidden aspect-video bg-sand-200 dark:bg-sand-800"
+              >
+                <img
+                  src={post.data.coverImage}
+                  alt=""
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                  onerror="this.onerror=null;this.src='/images/placeholder-blog.jpg'"
+                />
+              </a>
+              <div class="p-5">
+                <time class="text-xs text-sand-400 dark:text-sand-600" datetime={post.data.date}>
+                  {formattedDate}
+                </time>
+                <h2 class="font-cormorant font-semibold text-xl text-sand-900 dark:text-sand-50 mt-1 mb-2 leading-snug group-hover:text-sand-700 dark:group-hover:text-sand-200 transition-colors">
+                  <a href={`/blog/${post.slug}`}>{post.data.title}</a>
+                </h2>
+                <p class="text-sm text-sand-600 dark:text-sand-400 line-clamp-3">{post.data.excerpt}</p>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    ) : (
+      <p class="text-sand-400 dark:text-sand-600 text-sm">No posts in this category yet.</p>
+    )}
+  </div>
+</Layout>

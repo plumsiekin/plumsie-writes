@@ -1,0 +1,148 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Ornament from '@/components/Ornament.astro';
+import AuthorByline from '@/components/AuthorByline.astro';
+import RelatedContent from '@/components/RelatedContent.astro';
+import { ScrollProgressBar } from '@/components/ScrollProgressBar';
+import { getCollection } from 'astro:content';
+import { categoryLabels, type BlogCategory } from '@/lib/blog';
+import type { RelatedItem } from '@/components/RelatedContent.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { id: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+const allPosts = (await getCollection('blog')).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+const idx = allPosts.findIndex((p) => p.slug === post.slug);
+const prevPost = allPosts[idx + 1];
+const nextPost = allPosts[idx - 1];
+const related = allPosts
+  .filter((p) => p.slug !== post.slug && p.data.category === post.data.category)
+  .slice(0, 2);
+
+const words = post.body.split(/\s+/).length;
+const readingTime = Math.max(1, Math.round(words / 200));
+
+const formattedDate = new Date(post.data.date).toLocaleDateString('en-GB', {
+  day: 'numeric', month: 'long', year: 'numeric',
+});
+
+const desc = (post.data.excerpt ?? '').length > 160
+  ? (post.data.excerpt ?? '').slice(0, 157) + '…'
+  : (post.data.excerpt ?? '');
+
+const relatedItems: RelatedItem[] = related.map((p) => ({
+  href: `/blog/${p.slug}`,
+  title: p.data.title,
+  tag: categoryLabels[p.data.category as BlogCategory],
+  excerpt: p.data.excerpt ?? '',
+}));
+---
+
+<Layout
+  title={`${post.data.title} | plumsiepie`}
+  description={desc}
+  ogImage={post.data.coverImage}
+>
+  <ScrollProgressBar client:load />
+
+  <div class="max-w-3xl mx-auto px-6 py-16">
+    {post.data.coverImage && (
+      <div class="aspect-video rounded-lg overflow-hidden bg-sand-200 dark:bg-sand-800 mb-10">
+        <img
+          src={post.data.coverImage}
+          alt=""
+          class="w-full h-full object-cover"
+          loading="lazy"
+          onerror="this.onerror=null;this.style.display='none'"
+        />
+      </div>
+    )}
+
+    <div class="flex flex-wrap items-center gap-3 mb-4 text-xs text-sand-600 dark:text-sand-400">
+      <a
+        href={`/blog/category/${post.data.category}`}
+        class="border border-sand-200 dark:border-sand-700 px-2 py-0.5 rounded-full hover:border-sand-400 dark:hover:border-sand-500 transition-colors"
+      >
+        {categoryLabels[post.data.category as BlogCategory]}
+      </a>
+      <time datetime={post.data.date}>{formattedDate}</time>
+      <span>~{readingTime} min read</span>
+    </div>
+
+    <h1 class="font-cormorant font-semibold text-4xl md:text-5xl text-sand-900 dark:text-sand-50 mb-5 leading-tight">
+      {post.data.title}
+    </h1>
+
+    <div class="border-b border-sand-200 dark:border-sand-800 pb-5 mb-8">
+      <AuthorByline />
+    </div>
+
+    <div class="blog-prose max-w-[65ch]">
+      <Content />
+    </div>
+
+    <Ornament />
+
+    <div class="border border-sand-200 dark:border-sand-800 rounded-lg p-4 mb-8">
+      <p class="text-xs text-sand-400 dark:text-sand-600 uppercase tracking-widest mb-3">About the author</p>
+      <AuthorByline />
+    </div>
+
+    <nav
+      class="flex items-start justify-between gap-8 text-sm border-t border-sand-200 dark:border-sand-800 pt-8 mb-8"
+      aria-label="Post navigation"
+    >
+      {prevPost ? (
+        <a href={`/blog/${prevPost.slug}`} class="flex-1 group">
+          <p class="text-xs text-sand-400 mb-1 uppercase tracking-wider">Previous</p>
+          <p class="text-sand-700 dark:text-sand-300 group-hover:text-sand-900 dark:group-hover:text-sand-100 transition-colors leading-snug">
+            ← {prevPost.data.title}
+          </p>
+        </a>
+      ) : <span class="flex-1" />}
+      {nextPost ? (
+        <a href={`/blog/${nextPost.slug}`} class="flex-1 text-right group">
+          <p class="text-xs text-sand-400 mb-1 uppercase tracking-wider">Next</p>
+          <p class="text-sand-700 dark:text-sand-300 group-hover:text-sand-900 dark:group-hover:text-sand-100 transition-colors leading-snug">
+            {nextPost.data.title} →
+          </p>
+        </a>
+      ) : <span class="flex-1" />}
+    </nav>
+
+    {relatedItems.length > 0 && (
+      <RelatedContent heading="More from the blog" items={relatedItems} />
+    )}
+
+    <div class="mt-10 bg-sand-100 dark:bg-sand-900 border border-sand-200 dark:border-sand-800 rounded-lg p-6 text-center">
+      <h2 class="font-cormorant font-semibold text-2xl text-sand-900 dark:text-sand-50 mb-2">Follow the story</h2>
+      <p class="text-sand-600 dark:text-sand-400 text-sm mb-4">No schedule. Just a quiet note when something new is ready.</p>
+      <form class="flex flex-col sm:flex-row gap-3 max-w-sm mx-auto">
+        <label class="sr-only" for="blog-post-email">Email address</label>
+        <input
+          id="blog-post-email"
+          type="email"
+          placeholder="your@email.com"
+          class="flex-1 bg-white dark:bg-sand-800 border border-sand-200 dark:border-sand-700 rounded px-4 py-2 text-sm focus:outline-none focus:border-sand-400"
+        />
+        <button
+          type="submit"
+          class="bg-sand-800 hover:bg-sand-700 dark:bg-sand-700 dark:hover:bg-sand-600 text-sand-50 text-sm px-5 py-2 rounded transition-colors"
+        >
+          Subscribe
+        </button>
+      </form>
+    </div>
+  </div>
+</Layout>
