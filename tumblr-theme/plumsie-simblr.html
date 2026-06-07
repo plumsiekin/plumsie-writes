@@ -29,6 +29,8 @@
 
   <!-- ─── IMAGES ────────────────────────────────────── -->
   <meta name="image:Hero Background"    content="" />
+  <meta name="image:Sidebar Header"    content="" />
+  <meta name="image:Sidebar Background" content="" />
 
   <!-- ─── FEATURE TOGGLES ──────────────────────────────
        Appearance -->
@@ -339,7 +341,7 @@
 
     /* Mobile hamburger */
     #nav-toggle {
-      display: none;
+      display: block;
       background: none;
       border: 1px solid rgba(255,255,255,.2);
       border-radius: var(--radius-sm);
@@ -366,7 +368,7 @@
 
     /* Mobile nav drawer */
     #mobile-nav {
-      display: none;
+      display: block;
       position: absolute;
       top: 100%;
       left: 0;
@@ -415,18 +417,7 @@
       background: radial-gradient(ellipse 80% 80% at 50% 110%, transparent 40%, rgba(0,0,0,.4) 100%);
       pointer-events: none;
     }
-    #blog-hero::after {
-      content: '{text:Ornament}';
-      position: absolute;
-      bottom: -1.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 1.5rem;
-      color: var(--sand-400);
-      opacity: .5;
-      pointer-events: none;
-    }
-    .hero-avatar-wrap {
+    #blog-hero    .hero-avatar-wrap {
       position: relative;
       display: inline-block;
       margin-bottom: 1rem;
@@ -471,7 +462,7 @@
       margin: 0 auto;
       padding: 2.5rem 1.5rem;
       display: grid;
-      grid-template-columns: 1fr var(--sidebar-width);
+      grid-template-columns: var(--sidebar-width) 1fr;
       grid-template-rows: auto;
       gap: 2.5rem;
       align-items: start;
@@ -1294,12 +1285,12 @@
         position: static;
         order: -1;
       }
-      .sidebar-card.blog-card { display: none; } /* shown in hero on mobile */
+      .sidebar-card.blog-card { display: block; } /* shown in hero on mobile */
     }
 
     @media (max-width: 680px) {
       #nav-toggle { display: flex; }
-      #primary-nav { display: none; }
+      #primary-nav { display: block; }
       .header-inner { height: 3.5rem; }
       .post-inner { padding: 1.125rem 1.25rem; }
       .post-footer { padding: .75rem 1.25rem; }
@@ -1308,7 +1299,7 @@
     }
 
     @media (max-width: 480px) {
-      .post-actions { display: none; } /* tuck away on very small screens */
+      .post-actions { display: block; } /* tuck away on very small screens */
       .photoset-grid.cols-3 { grid-template-columns: repeat(2, 1fr); }
     }
 
@@ -1503,6 +1494,9 @@
             {/block:RebloggedFrom}
           </div>
 
+          <div class="ornament" aria-hidden="true" style="margin:0 1.75rem;">
+            <span class="ornament-icon">{text:Ornament}</span>
+          </div>
           <div class="ornament" aria-hidden="true" style="margin:0 1.75rem;">
             <span class="ornament-icon">{text:Ornament}</span>
           </div>
@@ -2162,7 +2156,7 @@
 
       <!-- Blog card -->
       <div class="sidebar-card blog-card">
-        <div class="sidebar-blog-banner" aria-hidden="true"></div>
+        <div class="sidebar-blog-banner" aria-hidden="true" style="background-image: url('{image:Sidebar Header}'); background-size: cover; background-position: center;"></div>
         <div class="sidebar-avatar-wrap">
           <img
             class="sidebar-avatar"
