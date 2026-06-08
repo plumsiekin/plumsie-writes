@@ -31,3 +31,4 @@ ehthumbs.db
 .env.development
 .env.local
 .env.*.local
+.aider*
