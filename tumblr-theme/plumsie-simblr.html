@@ -325,8 +325,12 @@ body.light, [data-theme="daynight"] body.dark {
 }
 
 /* Design system shadows on posts and sidebar */
-.entry { box-shadow: var(--ds-shadow-sm); transition: box-shadow 200ms var(--ds-ease); }
-.entry:hover { box-shadow: var(--ds-shadow-md); }
+.entry {
+    border: 1px solid var(--borders) !important;
+    box-shadow: var(--ds-shadow-md) !important;
+    transition: box-shadow 200ms var(--ds-ease);
+}
+.entry:hover { box-shadow: 0 6px 20px -4px rgba(46,26,8,0.18) !important; }
 
 /* Design system radii */
 .round, .entry article { border-radius: var(--ds-radius); }
@@ -352,7 +356,7 @@ body.light, [data-theme="daynight"] body.dark {
     line-height: 1;
     text-decoration: none;
     flex-shrink: 0;
-    text-transform: none;
+    text-transform: none !important;
 }
 .site-wordmark-accent {
     font-style: italic;
