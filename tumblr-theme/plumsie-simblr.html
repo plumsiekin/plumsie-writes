@@ -49,7 +49,7 @@ Credit:
 <meta name="color:Sidebar" content="#f9edd8">
 <meta name="color:Sidebar Icons" content="#f2d9b0">
 <meta name="color:Background" content="#fdf8f0">
-<meta name="color:Posts" content="#ffffff">
+<meta name="color:Posts" content="#f9edd8">
 <meta name="color:Borders" content="#f2d9b0">
 <meta name="color:Text" content="#4a2c10">
 <meta name="color:Permalink" content="#865018">
@@ -61,7 +61,7 @@ Credit:
 <meta name="color:Dark Sidebar" content="#4a2c10">
 <meta name="color:Dark Background" content="#2e1a08">
 <meta name="color:Dark Borders" content="#663c14">
-<meta name="color:Dark Posts" content="#4a2c10">
+<meta name="color:Dark Posts" content="#2e1a08">
 <meta name="color:Dark Text" content="#fdf8f0">
 <meta name="color:Dark Permalink" content="#e8c080">
 <meta name="color:Dark Question" content="#4a2c10">
@@ -352,6 +352,7 @@ body.light, [data-theme="daynight"] body.dark {
     line-height: 1;
     text-decoration: none;
     flex-shrink: 0;
+    text-transform: none;
 }
 .site-wordmark-accent {
     font-style: italic;
@@ -361,6 +362,14 @@ body.light, [data-theme="daynight"] body.dark {
     margin-left: 0.18em;
     vertical-align: 0.1em;
 }
+
+/* Lowercase UI — nav, cover title, sidebar headings; excludes post body */
+header nav a,
+header nav label,
+.cover-title,
+.c-title,
+.tab h2,
+.tab .t-title { text-transform: lowercase; }
 
 /* Header avatar — larger, fully rounded (radius-full) */
 .head-title img {
