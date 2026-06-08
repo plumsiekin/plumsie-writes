@@ -392,6 +392,10 @@ header nav label,
 .entry .post-footer { padding: 0.75em 2em 0.5em !important; }
 .entry .tags { padding: 0 2em 1.5em !important; }
 
+/* Ornament divider */
+.ornament-divider { display: block; width: 100%; height: 16px; margin: 0.75em 0; overflow: visible; }
+footer { border-top: none !important; }
+
 /* Header avatar — larger, fully rounded (radius-full) */
 .head-title img {
     width: 64px;
@@ -605,6 +609,7 @@ Please view the theme guide for Vermilion if you want to add more tabs/tab butto
 <div class="abt">
 {block:ifNotAboutInfo}{Description}{/block:ifNotAboutInfo}{block:ifAboutInfo}{text:About Info}{/block:ifAboutInfo}</div>
 </div>
+<svg class="ornament-divider" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 16" aria-hidden="true"><line x1="0" y1="8" x2="46" y2="8" stroke="#f2d9b0" stroke-width="1"/><text x="60" y="13" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="14" fill="#dca050">✦</text><line x1="74" y1="8" x2="120" y2="8" stroke="#f2d9b0" stroke-width="1"/></svg>
 {block:ifNotHideAboutImages}
 <div class="abt_img flex justify">
 <img src="{image:About 1}" draggable="false">
@@ -612,6 +617,7 @@ Please view the theme guide for Vermilion if you want to add more tabs/tab butto
 <img src="{image:About 3}" draggable="false">
 </div>
 {/block:ifNotHideAboutImages}
+<svg class="ornament-divider" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 16" aria-hidden="true"><line x1="0" y1="8" x2="46" y2="8" stroke="#f2d9b0" stroke-width="1"/><text x="60" y="13" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="14" fill="#dca050">✦</text><line x1="74" y1="8" x2="120" y2="8" stroke="#f2d9b0" stroke-width="1"/></svg>
 <div class="li flex justify">
 {block:ifLink1}<a href="{text:Link 1 URL}"><i class="bx {text:Link 1 Icon}"></i>{text:Link 1}</a>{/block:ifLink1}
 {block:ifLink2}<a href="{text:Link 2 URL}"><i class="bx {text:Link 2 Icon}"></i>{text:Link 2}</a>{/block:ifLink2}
@@ -630,6 +636,7 @@ Please view the theme guide for Vermilion if you want to add more tabs/tab butto
 {block:ifNotHideCurrentProjectImage}<img src="{image:Current Project}" draggable="false">{/block:ifNotHideCurrentProjectImage}
 <div class="c-title">{text:Current Project Title}</div>
 {block:ifCurrentProjectInfo}<div class="c-info">{text:Current Project Info}</div>{/block:ifCurrentProjectInfo}
+<svg class="ornament-divider" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 16" aria-hidden="true"><line x1="0" y1="8" x2="46" y2="8" stroke="#f2d9b0" stroke-width="1"/><text x="60" y="13" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="14" fill="#dca050">✦</text><line x1="74" y1="8" x2="120" y2="8" stroke="#f2d9b0" stroke-width="1"/></svg>
 <div class="c-stat">
 <p><strong>Date:</strong> {text:Current Project Date}</p>
 <p><strong>Status:</strong> {text:Current Project Status}</p>
@@ -1008,6 +1015,7 @@ Please view the theme guide for Vermilion if you want to add more tabs/tab butto
 {/block:Pagination}
 </div>
 
+<svg class="ornament-divider" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 16" aria-hidden="true"><line x1="0" y1="8" x2="46" y2="8" stroke="#f2d9b0" stroke-width="1"/><text x="60" y="13" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="14" fill="#dca050">✦</text><line x1="74" y1="8" x2="120" y2="8" stroke="#f2d9b0" stroke-width="1"/></svg>
 <footer class="flex justify">
 <span>© {CopyrightYears} <a href="/">{Name}</a><i class="bx bxs-circle"></i>Theme by <a href="https://ricecodes.tumblr.com/" target="_blank">ricecodes</a></span><span>All rights reserved.<i class="bx bxs-circle"></i>Powered by Tumblr.</span>
 </footer>
