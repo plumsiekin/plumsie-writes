@@ -394,7 +394,39 @@ header nav label,
 
 /* Ornament divider */
 .ornament-divider { display: block; width: 100%; height: 16px; margin: 0.75em 0; overflow: visible; }
-footer { border-top: none !important; }
+
+/* Remove original Vermilion border lines that the ornament replaces */
+.abt_img, .li, .c-stat { border-top: none !important; }
+
+/* Footer ornament line — CSS-only so it spans full width correctly */
+footer {
+    border-top: none !important;
+    position: relative;
+    margin-top: 2em;
+    padding-top: 1.5em;
+}
+footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #f2d9b0;
+}
+footer::after {
+    content: '✦';
+    position: absolute;
+    top: -0.65em;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #dca050;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1em;
+    background: var(--bg);
+    padding: 0 0.5em;
+    line-height: 1;
+}
 
 /* Header avatar — larger, fully rounded (radius-full) */
 .head-title img {
@@ -1015,7 +1047,6 @@ Please view the theme guide for Vermilion if you want to add more tabs/tab butto
 {/block:Pagination}
 </div>
 
-<svg class="ornament-divider" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 16" aria-hidden="true"><line x1="0" y1="8" x2="46" y2="8" stroke="#f2d9b0" stroke-width="1"/><text x="60" y="13" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="14" fill="#dca050">✦</text><line x1="74" y1="8" x2="120" y2="8" stroke="#f2d9b0" stroke-width="1"/></svg>
 <footer class="flex justify">
 <span>© {CopyrightYears} <a href="/">{Name}</a><i class="bx bxs-circle"></i>Theme by <a href="https://ricecodes.tumblr.com/" target="_blank">ricecodes</a></span><span>All rights reserved.<i class="bx bxs-circle"></i>Powered by Tumblr.</span>
 </footer>
